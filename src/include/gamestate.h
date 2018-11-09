@@ -8,7 +8,12 @@ struct gamestate
     //deltatime
     //SDL SurfaceS
     //SDL Window
+    //SDL Renderer
+    //SDL Textures
 }
+
+
+struct gamestate *init(void);
 
 
 #endif /*GAMESTATE_H_*/

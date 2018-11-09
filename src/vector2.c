@@ -24,13 +24,17 @@ void vector2_cpy(struct vector2 *v1, struct vector2 v2)
     v1->y = v2.y;
 }
 
+/*
 float vector2_len(struct vector2 v)
 {
     return sqrt(v.x * v.x + v.y * v.y);
 }
+*/
 
+/*
 void vector2_normalize(struct vector2 *v)
 {
     float len = vector2_len(*v);
     vector2_scale(v, 1/len);
 }
+*/
