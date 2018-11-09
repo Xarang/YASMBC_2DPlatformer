@@ -1,12 +1,17 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -pedantic -std=c99
-OBJS=src/vector2.o
+CFLAGS=-Wall -Werror -Wextra -pedantic -std=c99 -Isrc/include
+VPATH=src
+OBJS=main.o input.o vector2.o
 LDLIBS=
+
+EXEC=main
 
 CFLAGS += -I/usr/include/SDL2 -D_REENTRANT
 LDLIBS += -L/usr/lib -pthread -lSDL2
 
-all: $(OBJS)
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
 
 clean:
-	rm $(OBJS)
+	$(RM) $(EXEC) $(OBJS)
