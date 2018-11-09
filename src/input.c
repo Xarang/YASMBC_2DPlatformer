@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "input.h"
 
 static void reset_array(enum action inputs[NB_ACTION])
