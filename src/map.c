@@ -48,7 +48,9 @@ struct map *load_map(const char *filename)
         char **ptr = malloc(sizeof(char*));
         *ptr = NULL;
         size_t n = 64;
-        enum block_type *blocks;
+        enum block_type *blocks = NULL;
+        size_t h = 0;
+        size_t w = 0;
         size_t count = 0;
         while (1)
         { 
@@ -56,7 +58,7 @@ struct map *load_map(const char *filename)
             if (count > 3 && try > new->width + 1)
                 break;
             *(*ptr + try - 1) = '\0';
-            //printf("parsed line : %s\n", *ptr);
+            printf("parsed line : %s\n", *ptr);
             if (count == 0)
                 new->width = atoi(*ptr);
             else if (count == 1)
@@ -67,11 +69,12 @@ struct map *load_map(const char *filename)
                 new->start.y = atoi(*ptr);
             else
             {
-                size_t h = new->height;
-                //printf("h detected : %zu\n", h);
-                size_t w = new->width;
-                //printf("w detected : %zu\n", w);
-                blocks = malloc(sizeof(enum block_type) * h * w);
+                if (!blocks)
+                {
+                    h = new->height;
+                    w = new->width;
+                    blocks = malloc(sizeof(enum block_type) * h * w);
+                }
                 if (!blocks)
                 {
                     free(new);
@@ -80,8 +83,10 @@ struct map *load_map(const char *filename)
                 }
                 for (size_t i = 0; i < w; i++)
                 {
-                *(blocks + (count - 4) * w + i) = type_from_char(*(*ptr + i));
+                    printf("evaluating : %c\n", *(*ptr + i));
+                    *(blocks + (count - 4) * w + i) = type_from_char(*(*ptr + i));
                 }
+                printf("blocks : %d\n", *blocks);
             }
             count++;
         }

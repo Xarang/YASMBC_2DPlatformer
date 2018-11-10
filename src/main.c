@@ -7,6 +7,8 @@ struct gamestate *gamestate_init(void)
     if (!new)
         return NULL;
     new->map = load_map("resources/maps/map_one");
+    
+    map_print(new->map);
     struct transform player_pos =
     {
         1.0 / 2.0,
@@ -38,8 +40,9 @@ int main(void)
     */
     init_audio();
     Mix_Music *music = play_music("resources/audio/stage1.mp3");
-
+    music = music;
     render_game(game);
+    
     int inputs[NB_ACTION] =
     {
         0
@@ -51,7 +54,8 @@ int main(void)
     };
     init_sfx(game, sfxs);
 
-    while (1)
+    int count = 1;
+    while (count)
     {
         get_input(inputs, game);
         if (game->inputs[EXIT])
@@ -68,6 +72,7 @@ int main(void)
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
+        count++;
     }
     free_sfx(game->sfxs);
     Mix_FreeMusic(music);
