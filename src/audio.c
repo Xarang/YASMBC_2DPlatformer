@@ -16,6 +16,11 @@ int init_audio(void)
     return 0;
 }
 
+/* void init_sfx(struct gamestate *game) */
+/* { */
+
+/* } */
+
 Mix_Music *play_music(const char *file)
 {
     Mix_Music *music = Mix_LoadMUS(file);
