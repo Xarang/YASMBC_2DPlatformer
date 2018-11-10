@@ -21,12 +21,15 @@ void update(struct gamestate *gamestate, int *inputs)
     }
     else if (!gamestate->is_paused)
     {
-        /* size_t nb_entities = gamestate->nb_entities; */
-        /* struct entity *entities = gamestate->entities; */
-        /* //Should not work if entities are deleted */
-        /* for (size_t i = 0; i < nb_entities; i++) */
-        /* { */
-        /*     update_entity(entities[i], gamestate); */
-        /* } */
+        update_entity(gamestate->player, gamestate);
+#if 0
+        size_t nb_entities = gamestate->nb_entities;
+        struct entity *entities = gamestate->entities;
+        //Should not work if entities are deleted
+        for (size_t i = 0; i < nb_entities; i++)
+        {
+             update_entity(entities[i], gamestate);
+        }
+#endif
     }
 }

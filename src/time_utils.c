@@ -10,5 +10,7 @@ double delta_time(uint64_t *last_update_time)
 
     *last_update_time = now;
 
-    return (last - now) * 1000 / frequency;
+    double delta = (now - last) * 1000 / frequency;
+    printf("Delta = %f\n", delta);
+    return delta;
 }
