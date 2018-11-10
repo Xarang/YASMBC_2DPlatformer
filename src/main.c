@@ -16,8 +16,11 @@ struct gamestate *gamestate_init(void)
     };
     new->player = create_entity(PLAYER, player_pos);
     new->last_update_time = SDL_GetPerformanceFrequency();
+
     init_window(new);
+    warnx("window created");
     load_textures(new);
+    warnx("textures loaded");
 
     return new;
 }
@@ -30,6 +33,10 @@ int main(void)
 
     struct gamestate *game = gamestate_init();
 
+    /*
+    render_game(game);
+    sleep(500);
+    */
     init_audio();
     Mix_Music *music = play_music("resources/audio/stage1.mp3");
 

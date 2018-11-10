@@ -14,7 +14,7 @@ struct gamestate
     //SDL SurfaceS
     struct SDL_Window *window;
     struct SDL_Renderer *renderer;
-    struct SDL_Texture *textures;
+    struct list *textures;
     Mix_Chunk **sfxs;
     size_t texture_count;
 };
