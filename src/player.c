@@ -2,12 +2,38 @@
 #include "time_utils.h"
 
 #define PLAYER_G_FORCE (-10)
-#define PLAYER_MAX_VEL 0.01
+#define PLAYER_MAX_VEL 0.1
+#define PLAYER_LATERAL_ACC 10
+#define PLAYER_RUN_FACTOR 1.3
+
+static struct vector2 get_move_acc(enum action inputs[NB_ACTION])
+{
+    struct vector2 acc = { 0, 0 };
+    if (inputs[LEFT])
+    {
+        acc = vector2_add(acc, vector2_init(1, 0), -PLAYER_LATERAL_ACC);
+    }
+    if (inputs[RIGHT])
+    {
+        acc = vector2_add(acc, vector2_init(1, 0), PLAYER_LATERAL_ACC);
+    }
+    if (inputs[JUMP])
+    {
+        //Temporaire parce qu'il peut voler
+        acc = vector2_add(acc, vector2_init(0, 1), -10);
+    }
+    if (inputs[RUN])
+    {
+        acc = vector2_scale(acc, PLAYER_RUN_FACTOR);
+    }
+    return acc;
+}
 
 static struct transform get_new_transform(struct entity *player,
                                           struct gamestate *gamestate)
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
+    struct vector2 acc = vector2_add(acc, get_move_acc(gamestate->inputs), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = entity->transform;
