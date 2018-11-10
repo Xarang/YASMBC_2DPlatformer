@@ -10,6 +10,10 @@ enum block_type type_from_char(char c)
             return BLOCK;
         case 'F':
             return FINISH;
+        case 'X':
+            return DEATH;
+        case '$':
+            return ICE;
         default :
             return VOID;
     }
@@ -25,6 +29,10 @@ char char_from_type(enum block_type type)
             return '#';
         case FINISH:
             return 'F';
+        case DEATH:
+            return 'X';
+        case ICE:
+            return '$';
     }
     return '.';
 }
@@ -115,10 +123,10 @@ void map_print(struct map *map)
 
 enum block_type map_get_type(struct map *map, double i, double j)
 {
-    if (i < 0 || j < 0)
-        return BLOCK;
-    else if (i >= map->width || j >= map->height)
-        return BLOCK;
+    if (j < 0)
+        return DEATH;
+    else if (i >= map->width || j >= map->height || i < 0)
+        return ICE;
     size_t i_int = i;
     size_t j_int = j;
     size_t pos = map->width * j_int + i_int;

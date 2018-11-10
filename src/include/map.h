@@ -8,7 +8,9 @@ enum block_type
 {
     VOID  = 0,
     BLOCK = 1,
-    FINISH= 2
+    FINISH= 2,
+    DEATH = 3,
+    ICE   = 4
 };
 
 struct map

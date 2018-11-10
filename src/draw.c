@@ -3,7 +3,7 @@
 //should merge the two values below
 
 #define NB_TEXTURES 5
-#define NB_SPRITES 8
+#define NB_SPRITES 9
 
 
 enum texture_id
@@ -24,14 +24,18 @@ struct texture
 
 #define PLAYER_SPRITE_LEN 165
 
+#define BLOCK_SIZE_F 60
+
 struct texture textures[NB_SPRITES] =
 {
-    { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
-    { .id = MAP, .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
-                                            BLOCK_SIZE / 2, BLOCK_SIZE / 2 } },
-    { .id = MAP, .name = "finish", .rect = { BLOCK_SIZE * 3, BLOCK_SIZE * 4,
-                                             BLOCK_SIZE,     BLOCK_SIZE }},
-    { .id = MAP, .name = "forestbg1", .rect = {0, 0, 640, 480 }},
+    { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE_F,BLOCK_SIZE_F } },
+    { .id = MAP, .name = "player",.rect = { BLOCK_SIZE_F * 7, BLOCK_SIZE_F * 5,
+                                            BLOCK_SIZE_F / 2, BLOCK_SIZE_F / 2 } },
+    { .id = MAP, .name = "finish", .rect = { BLOCK_SIZE_F * 3, BLOCK_SIZE_F * 4,
+                                             BLOCK_SIZE_F,     BLOCK_SIZE_F }},
+    { .id = MAP, .name = "ice", .rect = { BLOCK_SIZE_F * 5.2, BLOCK_SIZE_F * 2.2,
+                                            BLOCK_SIZE_F * 0.7, BLOCK_SIZE_F * 0.7 }},
+    { .id = BACKGROUND, .name = "forestbg1", .rect = {0, 0, 640, 480 }},
 
     { .id = PLAYER_TXR, .name = "idle", .rect = {1, 1, PLAYER_SPRITE_LEN - 1,
                                                        PLAYER_SPRITE_LEN - 1}},
@@ -165,6 +169,10 @@ void render_map(struct gamestate *game)
             else if (current == FINISH)
             {
                 sprite = get_sprite("finish");
+            }
+            else if (current == ICE)
+            {
+                sprite = get_sprite("ice");
             }
             else
             {

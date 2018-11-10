@@ -6,8 +6,7 @@ struct gamestate *gamestate_init(void)
     struct gamestate *new = malloc(sizeof(struct gamestate));
     if (!new)
         return NULL;
-    new->map = load_map("resources/maps/map_one");
-    
+    new->map = load_map("resources/maps/map_one");   
     map_print(new->map);
     struct transform player_pos =
     {
