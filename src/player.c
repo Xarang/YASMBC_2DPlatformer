@@ -69,23 +69,23 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     return acc;
 }
 
-static struct vector2 get_frot_acc(struct entity *player)
+static struct vector2 get_frict_acc(struct entity *player)
 {
-    struct vector2 frot;
-    frot.y = 0;
+    struct vector2 frict;
+    frict.y = 0;
     if (player->is_grounded)
     {
-        frot.x = player->transform.vel.x * PLAYER_LATERAL_GROUND_FROT_FACTOR;
+        frict.x = player->transform.vel.x * PLAYER_LATERAL_GROUND_FROT_FACTOR;
     }
     else if (player->is_walled)
     {
-        frot.y = 0;
+        frict.y = 0;
     }
     else
     {
-        frot.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FROT_FACTOR;
+        frict.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FROT_FACTOR;
     }
-    return frot;
+    return frict;
 }
 
 static struct transform get_new_transform(struct entity *player,
@@ -93,7 +93,7 @@ static struct transform get_new_transform(struct entity *player,
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
     acc = vector2_add(acc, get_move_acc(gamestate->inputs, gamestate), 1);
-    acc = vector2_add(acc, get_frot_acc(player), 1);
+    acc = vector2_add(acc, get_frict_acc(player), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = player->transform;
@@ -111,8 +111,6 @@ void update_player(struct entity *player, struct gamestate *gamestate)
 {
     struct transform new_tf = get_new_transform(player, gamestate);
     struct transform old_tf = player->transform;
-    printf("old: (%f, %f)\nnew: (%f, %f)\n\n", old_tf.pos.x, old_tf.pos.y,
-           new_tf.pos.x, new_tf.pos.y);
 
     //If the new vertical position is in a block
     if (map_get_type(gamestate->map, old_tf.pos.x, new_tf.pos.y) == BLOCK)
