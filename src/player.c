@@ -6,7 +6,7 @@
 
 void update_player(struct entity *entity, struct gamestate *gamestate)
 {
-    struct vector2 acc = { 0, PLAYER_G_FORCE };
+    struct vector2 acc = { 0, -PLAYER_G_FORCE };
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = entity->transform;
