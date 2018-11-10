@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "entity.h"
 #include "player.h"
 #include "foe_1.h"

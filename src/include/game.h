@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <err.h>
 #include <unistd.h>
 #include <math.h>

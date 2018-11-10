@@ -1,4 +1,4 @@
-#include "include/game.h"
+#include "game.h"
 
 #define TEXTURE_MAX_AMOUNT 10
 

@@ -1,6 +1,8 @@
 #ifndef INPUT_H
 # define INPUT_H
 
+#include "gamestate.h"
+
 #define NB_ACTION 6
 
 enum action
@@ -13,6 +15,6 @@ enum action
     RESTART
 };
 
-void get_input(enum action inputs[NB_ACTION]);
+void get_input(int inputs[NB_ACTION], struct gamestate *game);
 
 #endif /* ! INPUT_H */

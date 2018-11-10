@@ -1,4 +1,4 @@
-#include "include/vector2.h"
+#include "vector2.h"
 
 struct vector2 vector2_init(double x, double y)
 {

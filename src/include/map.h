@@ -1,8 +1,8 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "game.h"
-
+#include <stddef.h>
+#include "vector2.h"
 
 enum block_type
 {

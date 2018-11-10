@@ -1,4 +1,4 @@
-#include "include/game.h"
+#include "game.h"
 
 struct gamestate *gamestate_init(void)
 {

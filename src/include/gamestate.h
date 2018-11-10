@@ -1,14 +1,15 @@
 #ifndef GAMESTATE_H_
 #define GAMESTATE_H_
 
-#include "game.h"
+#include <stddef.h>
+#include <stdint.h>
 
 struct gamestate
 {
     struct map *map;
     struct entity *player;
     uint64_t last_update_time;
-    enum action inputs[NB_ACTION];
+    int *inputs;
     //SDL SurfaceS
     struct SDL_Window *window;
     struct SDL_Renderer *renderer;

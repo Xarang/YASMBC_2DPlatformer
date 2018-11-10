@@ -1,7 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "game.h"
+#include "vector2.h"
+#include "gamestate.h"
 
 #define NB_ENTITY_TYPE 3
 

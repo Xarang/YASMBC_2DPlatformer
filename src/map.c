@@ -1,4 +1,4 @@
-#include "include/game.h"
+#include "game.h"
 
 enum block_type type_from_char(char c)
 {
