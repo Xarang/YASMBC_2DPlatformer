@@ -1,6 +1,7 @@
 #include "update.h"
 #include "entity.h"
 #include "audio.h"
+#include "player.h"
 
 void update(struct gamestate *gamestate, int *inputs)
 {
@@ -18,6 +19,7 @@ void update(struct gamestate *gamestate, int *inputs)
     else if (inputs[RESTART] == 1)
     {
         //Restart game
+        kill_player(gamestate->player, gamestate);
     }
     else if (!gamestate->is_paused)
     {
