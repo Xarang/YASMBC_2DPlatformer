@@ -10,6 +10,7 @@ static void reset_array(int *inputs)
 
 void get_input(int *inputs, struct gamestate *game)
 {
+    int jump_val = inputs[JUMP];
     reset_array(inputs);
     SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -18,7 +19,11 @@ void get_input(int *inputs, struct gamestate *game)
     if (state[SDL_SCANCODE_RIGHT])
         inputs[RIGHT]++;
     if (state[SDL_SCANCODE_SPACE] || state[SDL_SCANCODE_UP])
+    {
+        if (jump_val)
+            inputs[JUMP] = jump_val;
         inputs[JUMP]++;
+    }
     if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
         inputs[RUN]++;
     if (state[SDL_SCANCODE_ESCAPE])
