@@ -53,8 +53,7 @@ int main(void)
     };
     init_sfx(game, sfxs);
 
-    int count = 1;
-    while (count)
+    while (1)
     {
         get_input(inputs, game);
         if (game->inputs[EXIT])
@@ -71,7 +70,7 @@ int main(void)
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
-        count++;
+        count--;
     }
     free_sfx(game->sfxs);
     Mix_FreeMusic(music);

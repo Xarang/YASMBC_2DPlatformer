@@ -230,6 +230,12 @@ void render_UI(struct gamestate *game)
   //  }
 }
 
+/*
+void render_entities(struct gamestate *game)
+{
+    struct entit
+}
+*/
 void render_game(struct gamestate *game)
 {
     render_background(game);

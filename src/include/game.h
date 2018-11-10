@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <math.h>
 
-#define BLOCK_SIZE 60
+#define BLOCK_SIZE 40
 
 //includes all the other headers..
 
