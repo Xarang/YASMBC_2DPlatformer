@@ -88,6 +88,7 @@ struct map *load_map(const char *filename)
         free(ptr);
         fclose(f);
     }
+    printf("returning map\n");
     return new;
 }
 

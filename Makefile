@@ -8,8 +8,7 @@ EXEC=main
 
 CFLAGS += -g
 
-CFLAGS += -I/usr/include/SDL2 -D_REENTRANT
-LDLIBS += -L/usr/lib -pthread -lSDL2
+LDLIBS += -lSDL2
 
 all: $(EXEC)
 

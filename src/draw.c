@@ -29,14 +29,15 @@ void load_textures(struct gamestate *game)
 
 void init_window(struct gamestate *game)
 {
-    size_t height = game->map->height * BLOCK_SIZE;
-    size_t width = game->map->width * BLOCK_SIZE;
-    //size_t size = height * width;
-    SDL_Window *window = SDL_CreateWindow("VGR GAME",\
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,\
+    size_t height = 600;//game->map->height * BLOCK_SIZE;
+    size_t width = 800;//game->map->width * BLOCK_SIZE;
+   // size_t size = height * width;
+    SDL_Window *window = SDL_CreateWindow("VGR_GAME",
+            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             width, height, 0);
     if (!window)
         return;
+    printf("window created\n");
     SDL_Renderer *renderer = SDL_CreateRenderer(window, 0, 0);
     if (!renderer)
     {
@@ -49,6 +50,6 @@ void init_window(struct gamestate *game)
 /*
 struct SDL_Window *render_map(struct gamestate *game)
 {
-    
+       
 }
 */

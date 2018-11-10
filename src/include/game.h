@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <SDL2/SDL.h>
+#include <err.h>
 
 //includes all the other headers..
 
