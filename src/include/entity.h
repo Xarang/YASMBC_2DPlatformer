@@ -24,6 +24,7 @@ struct transform
 struct entity
 {
     enum entity_type type;
+    struct transform init_transform;
     struct transform transform;
     char is_grounded;
     char is_walled;
