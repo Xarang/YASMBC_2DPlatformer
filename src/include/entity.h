@@ -15,8 +15,8 @@ enum entity_type
 
 struct transform
 {
-    float height;
-    float width;
+    double height;
+    double width;
     struct vector2 pos;
     struct vector2 vel;
 };
@@ -28,6 +28,10 @@ struct entity
     //SDL thingies
 }
 
+struct entity *create_entity(enum entity_type type, struct transform transform);
+struct entity *clone_entity(struct entity *entity);
+void destroy_entity(struct entity *entity);
 void update_entity(struct entity *entity, struct gamestate *gamestate);
+int collides(struct transform tf1, struct transform tf2);
 
 #endif /* ! ENTITY_H */
