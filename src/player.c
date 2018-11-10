@@ -5,11 +5,16 @@
 #include "gamestate.h"
 #include "audio.h"
 
+//Reminder that the y axis is inverted
+
 #define PLAYER_G_FORCE (-0.00001)
 #define PLAYER_MAX_VEL 0.1
-#define PLAYER_JUMP_ACC (-0.0005)
+#define PLAYER_JUMP_ACC (-0.0004)
 #define PLAYER_LATERAL_ACC 0.00001
 #define PLAYER_RUN_FACTOR 1.3
+
+#define PLAYER_AIR_FROT_FACTOR 0.0
+#define PLAYER_LATERAL_FROT_FACTOR -0.0015
 
 static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
@@ -35,11 +40,29 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     return acc;
 }
 
+static struct vector2 get_frot_acc(struct entity *player,
+                                   __attribute__((unused))struct gamestate *gamestate)
+{
+    struct vector2 frot;
+    if (player->is_grounded)
+    {
+        frot.x = player->transform.vel.x * PLAYER_LATERAL_FROT_FACTOR;
+    }
+    else
+    {
+        frot.x = 0;
+    }
+    frot.y = 0;
+    frot = vector2_add(frot, player->transform.vel, PLAYER_AIR_FROT_FACTOR);
+    return frot;
+}
+
 static struct transform get_new_transform(struct entity *player,
                                           struct gamestate *gamestate)
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
     acc = vector2_add(acc, get_move_acc(gamestate->inputs, gamestate), 1);
+    acc = vector2_add(acc, get_frot_acc(player, gamestate), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = player->transform;
