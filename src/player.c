@@ -3,14 +3,17 @@
 #include "map.h"
 #include "input.h"
 #include "gamestate.h"
+#include "audio.h"
 
-#define PLAYER_G_FORCE (-10)
+#define PLAYER_G_FORCE (-0.00001)
 #define PLAYER_MAX_VEL 0.1
-#define PLAYER_LATERAL_ACC 10
+#define PLAYER_JUMP_ACC (-0.0005)
+#define PLAYER_LATERAL_ACC 0.00001
 #define PLAYER_RUN_FACTOR 1.3
 
-static struct vector2 get_move_acc(int *inputs)
+static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
+    struct entity *player = gamestate->player;
     struct vector2 acc = { 0, 0 };
     if (inputs[LEFT])
     {
@@ -20,10 +23,10 @@ static struct vector2 get_move_acc(int *inputs)
     {
         acc = vector2_add(acc, vector2_init(1, 0), PLAYER_LATERAL_ACC);
     }
-    if (inputs[JUMP])
+    if (inputs[JUMP] && player->is_grounded)
     {
-        //Temporaire parce qu'il peut voler
-        acc = vector2_add(acc, vector2_init(0, 1), -10);
+        Mix_PlayChannel(1, gamestate->sfxs[SFX_JUMP], 0);
+        acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
     }
     if (inputs[RUN])
     {
@@ -36,7 +39,7 @@ static struct transform get_new_transform(struct entity *player,
                                           struct gamestate *gamestate)
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
-    acc = vector2_add(acc, get_move_acc(gamestate->inputs), 1);
+    acc = vector2_add(acc, get_move_acc(gamestate->inputs, gamestate), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = player->transform;
@@ -54,6 +57,8 @@ void update_player(struct entity *player, struct gamestate *gamestate)
 {
     struct transform new_tf = get_new_transform(player, gamestate);
     struct transform old_tf = player->transform;
+    printf("old: (%f, %f)\nnew: (%f, %f)\n\n", old_tf.pos.x, old_tf.pos.y,
+           new_tf.pos.x, new_tf.pos.y);
 
     //If the new vertical position is in a block
     if (map_get_type(gamestate->map, old_tf.pos.x, new_tf.pos.y) == BLOCK)
@@ -65,6 +70,10 @@ void update_player(struct entity *player, struct gamestate *gamestate)
         }
         new_tf.vel.y = 0.0;
         new_tf.pos.y = old_tf.pos.y;
+    }
+    else
+    {
+        player->is_grounded = 0;
     }
     //If the new horizontal position is in a block
     if (map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y) == BLOCK)

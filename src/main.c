@@ -12,10 +12,10 @@ struct gamestate *gamestate_init(void)
         1.0 / 2.0,
         1.0 / 2.0,
         { new->map->start.x, new->map->start.y },
-        { 0               , 0                }
+        { 0                , 0                 }
     };
     new->player = create_entity(PLAYER, player_pos);
-    new->last_update_time = SDL_GetPerformanceFrequency();
+    new->last_update_time = SDL_GetPerformanceCounter();
     new->is_paused = 0;
     init_window(new);
     warnx("window created");
@@ -32,7 +32,6 @@ int main(void)
     //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
-    SDL_RenderClear(game->renderer);
     /*
     render_game(game);
     sleep(500);
@@ -57,16 +56,18 @@ int main(void)
         get_input(inputs, game);
         if (game->inputs[EXIT])
             break;
-        /* for (size_t i = 0; i < NB_ACTION; i++) */
-        /* { */
-        /*     if (game->inputs[i]) */
-        /*         printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]); */
-        /*     if (game->inputs[JUMP] == 1) */
-        /*         Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0); */
-        /* } */
+         for (size_t i = 0; i < NB_ACTION; i++)
+         {
+             if (game->inputs[i])
+                 printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
+             if (game->inputs[JUMP] == 1)
+                 Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0);
+         }
         update(game, inputs);
+
+        SDL_RenderClear(game->renderer);
         render_game(game);
-        SDL_Delay(1);
+        SDL_Delay(16.66);
     }
     free_sfx(game->sfxs);
     Mix_FreeMusic(music);
