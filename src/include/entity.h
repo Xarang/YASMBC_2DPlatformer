@@ -4,6 +4,15 @@
 #include //input management
 #include "vector2.h"
 
+#define NB_ENTITY_TYPE 3
+
+enum entity_type
+{
+    PLAYER,
+    FOE_1,
+    FOE_2
+};
+
 struct transform
 {
     float height;
@@ -14,10 +23,11 @@ struct transform
 
 struct entity
 {
+    enum entity_type type;
     struct transform transform;
     //SDL thingies
 }
 
-void move_player(struct entity *player, enum action action);
+void update_entity(struct entity *entity, struct gamestate *gamestate);
 
 #endif /* ! ENTITY_H */

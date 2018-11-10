@@ -6,6 +6,7 @@ struct gamestate
     struct map *map;
     //player
     //deltatime
+    //inputs[]
     //SDL SurfaceS
     struct SDL_Window *window;
     struct SDL_Renderer *renderer;
