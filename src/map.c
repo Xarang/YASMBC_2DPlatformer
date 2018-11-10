@@ -108,8 +108,12 @@ void map_print(struct map *map)
 }
 
 
-enum block_type map_get_type(struct map *map, size_t i, size_t j)
+enum block_type map_get_type(struct map *map, double i, double j)
 {
+    if (i < 0 && j < 0)
+        return BLOCK;
+    else if (i >= map->width || j >= map->height)
+        return BLOCK;
     return map->blocks[map->width * j + i];
 }
 
