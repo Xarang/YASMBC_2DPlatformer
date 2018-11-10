@@ -120,17 +120,14 @@ void map_print(struct map *map)
 
 }
 
-
 enum block_type map_get_type(struct map *map, double i, double j)
 {
-    if (j < 0)
+    if (j >= map->height)
         return DEATH;
-    else if (i >= map->width || j >= map->height || i < 0)
+    else if (i >= map->width || j < 0 || i < 0)
         return ICE;
     size_t i_int = i;
     size_t j_int = j;
     size_t pos = map->width * j_int + i_int;
     return map->blocks[pos];
 }
-
-

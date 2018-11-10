@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <SDL_mixer.h>
+#include "map.h"
 
 struct gamestate
 {
