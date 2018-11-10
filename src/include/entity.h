@@ -25,6 +25,7 @@ struct entity
 {
     enum entity_type type;
     struct transform transform;
+    char is_grounded;
     //SDL thingies
 }
 
