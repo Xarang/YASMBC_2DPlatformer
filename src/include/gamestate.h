@@ -14,7 +14,6 @@ struct gamestate
     size_t texture_count;
 };
 
-
 struct gamestate *init(void);
 
 

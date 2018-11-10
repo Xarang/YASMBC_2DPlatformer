@@ -21,7 +21,9 @@ void load_textures(struct gamestate *game)
    // if (!textures)
    //     return;
     
-    SDL_Surface *blocks = SDL_LoadBMP(ressource_files[0]);
+    SDL_Surface *blocks = IMG_Load(ressource_files[0]);
+    if (!blocks)
+        printf("could not load texture\n");
     SDL_Texture *blocks_texture=SDL_CreateTextureFromSurface(renderer,blocks);
     game->texture_count++;
     game->textures = blocks_texture;
@@ -47,9 +49,34 @@ void init_window(struct gamestate *game)
     game->renderer = renderer;
 }
 
-/*
-struct SDL_Window *render_map(struct gamestate *game)
+void render_map(struct gamestate *game)
 {
-       
+    struct SDL_Rect grass =
+    {
+        0,
+        0,
+        BLOCK_SIZE,
+        BLOCK_SIZE
+    };
+
+    struct SDL_Rect select = 
+    {
+        0,
+        0,
+        BLOCK_SIZE,
+        BLOCK_SIZE
+    };
+
+    struct map *map = game->map;
+    size_t size = game->width * game->height;
+    for (size_t i = 0; i < size; i++)
+    {
+        for (size_t j = 0; j < size. j++)
+        {
+                
+        }
+    }
+
+    SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
+    SDL_RenderPresent(game->renderer);
 }
-*/

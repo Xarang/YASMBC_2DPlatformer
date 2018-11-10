@@ -106,6 +106,13 @@ void map_print(struct map *map)
     }
 
 }
+
+
+enum block_type map_get_type(struct map *map, size_t i, size_t j)
+{
+    return *(map->blocks + map->width * j + i);
+}
+
 /*
 int main(int argc, char **argv)
 {

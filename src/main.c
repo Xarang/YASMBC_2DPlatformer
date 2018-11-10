@@ -20,7 +20,9 @@ int main(void)
     //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
-    
+    render_map(game);
+   
+    sleep(5);
     
     game = game;
     SDL_Quit();
