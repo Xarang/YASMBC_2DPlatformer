@@ -1,9 +1,12 @@
+#include <math.h>
 #include "player.h"
 #include "time_utils.h"
 #include "map.h"
 #include "input.h"
 #include "gamestate.h"
 #include "audio.h"
+
+#define SIGN(X) (((X) > 0) - ((X) < 0))
 
 //Reminder that the y axis is inverted
 
@@ -16,11 +19,14 @@
 #define PLAYER_LATERAL_AIR_FROT_FACTOR (-0.0001)
 #define PLAYER_LATERAL_GROUND_FROT_FACTOR -0.0015
 #define PLAYER_INERTIA_FACTOR (-0.002)
+#define PLAYER_WALL_JUMP_X_FACTOR 0.005
+#define PLAYER_WALL_JUMP_Y_FACTOR 0.009
 
 static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
     struct entity *player = gamestate->player;
     struct vector2 acc = { 0, 0 };
+
     if (inputs[LEFT])
     {
         acc = vector2_add(acc, vector2_init(1, 0), -PLAYER_LATERAL_ACC);
@@ -29,6 +35,7 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
             acc.x += player->transform.vel.x * PLAYER_INERTIA_FACTOR;
         }
     }
+
     if (inputs[RIGHT])
     {
         acc = vector2_add(acc, vector2_init(1, 0), PLAYER_LATERAL_ACC);
@@ -37,31 +44,49 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
             acc.x += player->transform.vel.x * PLAYER_INERTIA_FACTOR;
         }
     }
-    if (inputs[JUMP] && player->is_grounded)
+
+    if (inputs[JUMP] && (player->is_grounded || player->is_walled))
     {
         Mix_PlayChannel(1, gamestate->sfxs[SFX_JUMP], 0);
-        acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
+        if (player->is_grounded)
+        {
+            acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
+        }
+        else
+        {
+            float val = sqrt(2) / 2;
+            player->transform.vel.x = val * PLAYER_WALL_JUMP_X_FACTOR *
+                                      -player->wall_dir;
+            player->transform.vel.y = -val * PLAYER_WALL_JUMP_Y_FACTOR;
+        }
     }
+
     if (inputs[RUN])
     {
         acc.x *= PLAYER_RUN_FACTOR;
     }
+
     return acc;
 }
 
 static struct vector2 get_frot_acc(struct entity *player,
-                                   __attribute__((unused))struct gamestate *gamestate)
+                                   __attribute__((unused))struct gamestate 
+                                   *gamestate)
 {
     struct vector2 frot;
+    frot.y = 0;
     if (player->is_grounded)
     {
         frot.x = player->transform.vel.x * PLAYER_LATERAL_GROUND_FROT_FACTOR;
+    }
+    else if (player->is_walled)
+    {
+        frot.y = 0;
     }
     else
     {
         frot.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FROT_FACTOR;
     }
-    frot.y = 0;
     return frot;
 }
 
@@ -106,11 +131,18 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     {
         player->is_grounded = 0;
     }
+
     //If the new horizontal position is in a block
     if (map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y) == BLOCK)
     {
+        player->is_walled = 1;
+        player->wall_dir = SIGN(new_tf.pos.x - old_tf.pos.x);
         new_tf.vel.x = 0.0;
         new_tf.pos.x = old_tf.pos.x;
+    }
+    else
+    {
+        player->is_walled = 0;
     }
     player->transform = new_tf;
 }
