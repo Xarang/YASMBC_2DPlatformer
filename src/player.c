@@ -16,8 +16,9 @@
 #define PLAYER_LATERAL_ACC 0.00001
 #define PLAYER_RUN_FACTOR 2.0
 
-#define PLAYER_LATERAL_AIR_FROT_FACTOR (-0.0001)
-#define PLAYER_LATERAL_GROUND_FROT_FACTOR -0.0015
+#define PLAYER_LATERAL_AIR_FRICT_FACTOR (-0.0001)
+#define PLAYER_LATERAL_GROUND_FRICT_FACTOR -0.0015
+#define PLAYER_LATERAL_ICE_FRICT_FACTOR -0.00015
 #define PLAYER_INERTIA_FACTOR (-0.002)
 #define PLAYER_WALL_JUMP_X_FACTOR 0.005
 #define PLAYER_WALL_JUMP_Y_FACTOR 0.009
@@ -47,7 +48,7 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 
     if (inputs[JUMP] && (player->is_grounded || player->is_walled))
     {
-        Mix_PlayChannel(1, gamestate->sfxs[SFX_JUMP], 0);
+        play_sfx(SFX_JUMP, gamestate);
         if (player->is_grounded)
         {
             acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
@@ -69,23 +70,37 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     return acc;
 }
 
-static struct vector2 get_frot_acc(struct entity *player)
+static double get_frict_factor(enum block_type b_type)
 {
-    struct vector2 frot;
-    frot.y = 0;
+    switch (b_type)
+    {
+    case BLOCK:
+        return PLAYER_LATERAL_GROUND_FRICT_FACTOR;
+    case ICE:
+        return PLAYER_LATERAL_ICE_FRICT_FACTOR;
+    default:
+        return -1.0;
+    }
+}
+
+static struct vector2 get_frict_acc(struct entity *player)
+{
+    struct vector2 frict;
+    frict.y = 0;
     if (player->is_grounded)
     {
-        frot.x = player->transform.vel.x * PLAYER_LATERAL_GROUND_FROT_FACTOR;
+        frict.x = player->transform.vel.x *
+                  get_frict_factor(player->ground_type);
     }
     else if (player->is_walled)
     {
-        frot.y = 0;
+        frict.y = 0;
     }
     else
     {
-        frot.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FROT_FACTOR;
+        frict.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FRICT_FACTOR;
     }
-    return frot;
+    return frict;
 }
 
 static struct transform get_new_transform(struct entity *player,
@@ -93,7 +108,7 @@ static struct transform get_new_transform(struct entity *player,
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
     acc = vector2_add(acc, get_move_acc(gamestate->inputs, gamestate), 1);
-    acc = vector2_add(acc, get_frot_acc(player), 1);
+    acc = vector2_add(acc, get_frict_acc(player), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = player->transform;
@@ -111,19 +126,25 @@ void update_player(struct entity *player, struct gamestate *gamestate)
 {
     struct transform new_tf = get_new_transform(player, gamestate);
     struct transform old_tf = player->transform;
-    printf("old: (%f, %f)\nnew: (%f, %f)\n\n", old_tf.pos.x, old_tf.pos.y,
-           new_tf.pos.x, new_tf.pos.y);
 
     //If the new vertical position is in a block
-    if (map_get_type(gamestate->map, old_tf.pos.x, new_tf.pos.y) == BLOCK)
+    enum block_type tile = map_get_type(gamestate->map, old_tf.pos.x,
+                                        new_tf.pos.y);
+    if (tile == BLOCK || tile == ICE)
     {
         //If the new vertical position is lower
         if (new_tf.pos.y >= old_tf.pos.y)
         {
             player->is_grounded = 1;
+            player->ground_type = tile;
         }
         new_tf.vel.y = 0.0;
         new_tf.pos.y = old_tf.pos.y;
+    }
+    else if (tile == DEATH)
+    {
+        kill_player(player, gamestate);
+        return;
     }
     else
     {
@@ -131,12 +152,21 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     }
 
     //If the new horizontal position is in a block
-    if (map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y) == BLOCK)
+    tile = map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y);
+    if (tile == BLOCK || tile == ICE)
     {
-        player->is_walled = 1;
-        player->wall_dir = SIGN(new_tf.pos.x - old_tf.pos.x);
+        if (tile == BLOCK)
+        {
+            player->is_walled = 1;
+            player->wall_dir = SIGN(new_tf.pos.x - old_tf.pos.x);
+        }
         new_tf.vel.x = 0.0;
         new_tf.pos.x = old_tf.pos.x;
+    }
+    else if (tile == DEATH)
+    {
+        kill_player(player, gamestate);
+        return;
     }
     else
     {
@@ -147,6 +177,7 @@ void update_player(struct entity *player, struct gamestate *gamestate)
 
 void kill_player(struct entity *player, struct gamestate *gamestate)
 {
+    play_sfx(SFX_DEATH, gamestate);
     reset_entity(player);
     gamestate = gamestate;
 }

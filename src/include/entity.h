@@ -29,6 +29,7 @@ struct entity
     char is_grounded;
     char is_walled;
     char wall_dir;
+    enum block_type ground_type;
     //SDL thingies
 };
 
