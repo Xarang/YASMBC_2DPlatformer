@@ -32,7 +32,7 @@ int main(void)
     //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
-
+    SDL_RenderClear(game->renderer);
     /*
     render_game(game);
     sleep(500);
@@ -40,7 +40,7 @@ int main(void)
     init_audio();
     Mix_Music *music = play_music("resources/audio/stage1.mp3");
 
-    render_map(game);
+    render_game(game);
     int inputs[NB_ACTION] =
     {
         0
@@ -65,7 +65,7 @@ int main(void)
         /*         Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0); */
         /* } */
         update(game, inputs);
-        render_map(game);
+        render_game(game);
         SDL_Delay(1);
     }
     free_sfx(game->sfxs);
