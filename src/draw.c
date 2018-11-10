@@ -67,6 +67,15 @@ void render_map(struct gamestate *game)
 
     };
 
+    struct SDL_Rect player =
+    {
+        BLOCK_SIZE * 7,
+        BLOCK_SIZE * 5,
+        BLOCK_SIZE / 2,
+        BLOCK_SIZE / 2
+    };
+    player = player;
+
     struct map *map = game->map;
 
    // struct SDL_Rect *rect[map->width][map->height];
@@ -96,5 +105,18 @@ void render_map(struct gamestate *game)
             }
         }
     }
+    struct transform player_tf = game->player->transform;
+    
+    struct SDL_Rect player_position =
+    {
+        BLOCK_SIZE * (player_tf.pos.x - player_tf.width / 2),
+        BLOCK_SIZE * (player_tf.pos.y - player_tf.height / 2),
+        BLOCK_SIZE * player_tf.width,
+        BLOCK_SIZE * player_tf.height
+    };
+    warnx("player position : %f/%f\n",player_tf.pos.x, player_tf.pos.y);
+    warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
+
+    SDL_RenderCopy(game->renderer, game->textures, &player, &player_position); 
     SDL_RenderPresent(game->renderer);
 }

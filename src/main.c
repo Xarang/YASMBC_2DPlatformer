@@ -8,8 +8,8 @@ struct gamestate *gamestate_init(void)
     new->map = load_map("resources/maps/map_one");
     struct transform player_pos =
     {
-        BLOCK_SIZE / 2,
-        BLOCK_SIZE / 2,
+        1.0 / 2.0,
+        1.0 / 2.0,
         { new->map->start.x, new->map->start.y },
         { 0               , 0                }
     };

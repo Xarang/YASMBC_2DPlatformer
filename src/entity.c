@@ -15,7 +15,6 @@ struct entity *create_entity(enum entity_type type, struct transform transform)
     }
     res->type = type;
     res->transform = transform;
-    res->is_grounded = 0;
     return res;
 }
 
