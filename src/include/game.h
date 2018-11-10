@@ -1,16 +1,20 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <SDL/SDL2.h>
+#include <SDL.h>
+#include <err.h>
 
 //includes all the other headers..
 
-#include "draw.h"
-#include "gamestate.h"
-#include "map.h"
+
 #include "vector2.h"
+#include "map.h"
+#include "gamestate.h"
+#include "draw.h"
 
 #endif /*GAME_H_*/

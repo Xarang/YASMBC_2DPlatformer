@@ -7,7 +7,7 @@ struct map
     size_t height;
     char *blocks;
     struct vector2 start;
-}
+};
 
 enum block_type
 {

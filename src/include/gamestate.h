@@ -3,14 +3,15 @@
 
 struct gamestate
 {
-    //map
+    struct map *map;
     //player
     //deltatime
     //SDL SurfaceS
-    //SDL Window
-    //SDL Renderer
-    //SDL Textures
-}
+    struct SDL_Window *window;
+    struct SDL_Renderer *renderer;
+    struct SDL_Texture *textures;
+    size_t texture_count;
+};
 
 
 struct gamestate *init(void);
