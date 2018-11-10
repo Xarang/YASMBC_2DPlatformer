@@ -3,11 +3,12 @@
 
 #include "gamestate.h"
 
-#define NB_SFX 1
+#define NB_SFX 2
 
 enum sfxs
 {
-    SFX_JUMP
+    SFX_JUMP,
+    SFX_PAUSE
 };
 
 int init_audio(void);

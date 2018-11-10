@@ -17,6 +17,7 @@ struct gamestate
     struct SDL_Texture *textures;
     Mix_Chunk **sfxs;
     size_t texture_count;
+    int is_paused;
 };
 
 struct gamestate *init(void);
