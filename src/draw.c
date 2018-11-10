@@ -1,6 +1,34 @@
 #include "game.h"
 
-#define TEXTURE_MAX_AMOUNT 10
+#define TEXTURE_MAX_AMOUNT 3
+
+struct texture
+{
+    char *name;
+    SDL_Rect rect;
+};
+
+struct texture textures[TEXTURE_MAX_AMOUNT] =
+{
+    { .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
+    { .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
+                                 BLOCK_SIZE / 2, BLOCK_SIZE / 2 } },
+    { .name = "finish", .rect = { BLOCK_SIZE * 3, BLOCK_SIZE * 4,
+                                 BLOCK_SIZE,     BLOCK_SIZE }}
+};
+
+struct SDL_Rect get_sprite(const char *name)
+{
+    for (size_t i = 0; i < TEXTURE_MAX_AMOUNT; i++)
+    {
+        if (strcmp(name, textures[i].name) == 0)
+        {
+            return textures[i].rect;
+        }
+    }
+    SDL_Rect null = {0, 0, 0, 0};
+    return null;
+}
 
 
 const char* ressource_files[] = 
@@ -50,32 +78,6 @@ void init_window(struct gamestate *game)
 
 void render_map(struct gamestate *game)
 {
-    struct SDL_Rect grass =
-    {
-        0,
-        0,
-        BLOCK_SIZE,
-        BLOCK_SIZE
-    };
-
-    struct SDL_Rect finish =
-    {
-        BLOCK_SIZE * 3,
-        BLOCK_SIZE * 4,
-        BLOCK_SIZE,
-        BLOCK_SIZE
-
-    };
-
-    struct SDL_Rect player =
-    {
-        BLOCK_SIZE * 7,
-        BLOCK_SIZE * 5,
-        BLOCK_SIZE / 2,
-        BLOCK_SIZE / 2
-    };
-    player = player;
-
     struct map *map = game->map;
 
    // struct SDL_Rect *rect[map->width][map->height];
@@ -93,21 +95,24 @@ void render_map(struct gamestate *game)
                 BLOCK_SIZE,
                 BLOCK_SIZE
             };
+            struct SDL_Rect sprite;
             if (current == BLOCK)
             {
+                sprite = get_sprite("grass");
                 warnx("found block in %zu/%zu\n", i, j);
-                int try = SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
+                int try = SDL_RenderCopy(game->renderer, game->textures, &sprite, &select);
                 warnx("insert in renderer : %d : %d/%d\n", try, select.x, select.y);
             }
             else if (current == FINISH)
             {
-                SDL_RenderCopy(game->renderer, game->textures, &finish, &select);
+                sprite = get_sprite("finish");
+                SDL_RenderCopy(game->renderer, game->textures, &sprite, &select);
             }
         }
     }
     struct transform player_tf = game->player->transform;
     
-    struct SDL_Rect player_position =
+    struct SDL_Rect player_position = 
     {
         BLOCK_SIZE * (player_tf.pos.x - player_tf.width / 2),
         BLOCK_SIZE * (player_tf.pos.y - player_tf.height / 2),
@@ -117,6 +122,7 @@ void render_map(struct gamestate *game)
     warnx("player position : %f/%f\n",player_tf.pos.x, player_tf.pos.y);
     warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
 
-    SDL_RenderCopy(game->renderer, game->textures, &player, &player_position); 
+    struct SDL_Rect sprite = get_sprite("player");
+    SDL_RenderCopy(game->renderer, game->textures, &sprite, &player_position); 
     SDL_RenderPresent(game->renderer);
 }

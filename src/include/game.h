@@ -12,9 +12,9 @@
 #include <unistd.h>
 #include <math.h>
 
-//includes all the other headers..
-
 #define BLOCK_SIZE 60
+
+//includes all the other headers..
 
 #include "vector2.h"
 #include "input.h"
