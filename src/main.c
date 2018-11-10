@@ -29,6 +29,10 @@ int main(void)
     //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
+
+    init_audio();
+    Mix_Music *music = play_music("resources/audio/stage1.mp3");
+
     render_map(game);
     int inputs[NB_ACTION] =
     {
@@ -48,6 +52,8 @@ int main(void)
         render_map(game);
         SDL_Delay(1);
     }
+    Mix_FreeMusic(music);
+    close_audio();
     SDL_Quit();
     return 0;
 }

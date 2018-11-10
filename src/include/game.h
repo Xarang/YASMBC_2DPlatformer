@@ -23,5 +23,6 @@
 #include "map.h"
 #include "entity.h"
 #include "time_utils.h"
+#include "audio.h"
 
 #endif /*GAME_H_*/
