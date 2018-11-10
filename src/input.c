@@ -26,8 +26,10 @@ void get_input(int *inputs, struct gamestate *game)
     }
     if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
         inputs[RUN]++;
-    if (state[SDL_SCANCODE_ESCAPE])
+    if (state[SDL_SCANCODE_P])
         inputs[PAUSE]++;
+    if (state[SDL_SCANCODE_ESCAPE])
+        inputs[EXIT]++;
     if (state[SDL_SCANCODE_R])
         inputs[RESTART]++;
     game->inputs = inputs;

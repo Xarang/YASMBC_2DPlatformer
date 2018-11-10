@@ -3,7 +3,7 @@
 
 #include "gamestate.h"
 
-#define NB_ACTION 6
+#define NB_ACTION 7
 
 enum action
 {
@@ -12,6 +12,7 @@ enum action
     JUMP,
     RUN,
     PAUSE,
+    EXIT,
     RESTART
 };
 

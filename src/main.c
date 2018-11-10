@@ -37,12 +37,16 @@ int main(void)
     while (1)
     {
         get_input(inputs, game);
+        if (game->inputs[EXIT])
+            break;
         for (size_t i = 0; i < NB_ACTION; i++)
         {
             if (game->inputs[i])
                 printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
         }
-        //render_map(game);
+        //update(game, inputs);
+        render_map(game);
+        SDL_Delay(1);
     }
     SDL_Quit();
     return 0;

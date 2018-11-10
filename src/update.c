@@ -1,4 +1,5 @@
 #include "update.h"
+#include "entity.h"
 
 void update(struct gamestate *gamestate, int *inputs)
 {
