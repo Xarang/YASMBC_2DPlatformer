@@ -21,7 +21,8 @@ void init_sfx(struct gamestate *game, Mix_Chunk **sfxs)
     const char* sfx_list[NB_SFX] =
     {
         "resources/audio/jump.wav",
-        "resources/audio/pause.wav"
+        "resources/audio/pause.wav",
+        "resources/audio/death.wav"
     };
     for (size_t i = 0; i < NB_SFX; i++)
     {

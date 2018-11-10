@@ -145,6 +145,7 @@ void update_player(struct entity *player, struct gamestate *gamestate)
 
 void kill_player(struct entity *player, struct gamestate *gamestate)
 {
+    play_sfx(SFX_DEATH, gamestate);
     reset_entity(player);
     gamestate = gamestate;
 }
