@@ -17,19 +17,10 @@ struct entity *create_entity(enum entity_type type, struct transform transform)
     }
     res->type = type;
     res->transform = transform;
+    res->init_transform = transform;
     res->is_grounded = 0;
+    res->is_walled = 0;
     return res;
-}
-
-struct entity *clone_entity(struct entity *entity)
-{
-    struct entity *clone = create_entity(entity->type, entity->transform);
-    if (!clone)
-    {
-        fprintf(stderr, "Could not clone struct entity\n");
-        return NULL;
-    }
-    return clone;
 }
 
 void destroy_entity(struct entity *entity)
@@ -46,6 +37,13 @@ void update_entity(struct entity *entity, struct gamestate *gamestate)
         update_foe_2
     };
     f_list[entity->type](entity, gamestate);
+}
+
+void reset_entity(struct entity *entity)
+{
+    entity->transform = entity->init_transform;
+    entity->is_grounded = 0;
+    entity->is_walled = 0;
 }
 
 static int is_in_hitbox(struct vector2 point, struct transform tf)
