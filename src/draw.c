@@ -2,7 +2,7 @@
 
 //should merge the two values below
 
-#define NB_TEXTURES 4
+#define NB_TEXTURES 5
 
 enum texture_id
 {
@@ -20,14 +20,23 @@ struct texture
     SDL_Rect rect;
 };
 
-struct texture textures[NB_TEXTURES] =
+#define PLAYER_SPRITE_LEN 150
+
+struct texture textures[] =
 {
     { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
     { .id = MAP, .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
-                                 BLOCK_SIZE / 2, BLOCK_SIZE / 2 } },
+                                            BLOCK_SIZE / 2, BLOCK_SIZE / 2 } },
     { .id = MAP, .name = "finish", .rect = { BLOCK_SIZE * 3, BLOCK_SIZE * 4,
-                                 BLOCK_SIZE,     BLOCK_SIZE }},
-    { .id = MAP, .name = "forestbg1", .rect = {0, 0, 640, 480 }}
+                                             BLOCK_SIZE,     BLOCK_SIZE }},
+    { .id = MAP, .name = "forestbg1", .rect = {0, 0, 640, 480 }},
+
+    { .id = PLAYER_TXR, .name = "idle", .rect = {1, 1, PLAYER_SPRITE_LEN - 1,
+                                                       PLAYER_SPRITE_LEN - 1}},
+    { .id = PLAYER_TXR, .name = "jump", .rect = {PLAYER_SPRITE_LEN * 5 + 1,
+                                                 PLAYER_SPRITE_LEN * 1 + 1,
+                                                 PLAYER_SPRITE_LEN - 1,
+                                                 PLAYER_SPRITE_LEN - 1}}
 };
 
 struct SDL_Rect get_sprite(const char *name)
@@ -47,8 +56,9 @@ const char* ressource_files[NB_TEXTURES] =
 {
     "resources/sprites/forestbg.png",
     "resources/sprites/tiles.png",
+    "resources/sprites/cube.png",
     "resources/sprites/tiles.png",
-    "resources/sprites/tiles.png",
+    "resources/sprites/tiles.png"
 };
 
 void load_textures(struct gamestate *game)
@@ -64,6 +74,8 @@ void load_textures(struct gamestate *game)
         if (!blocks)
             printf("could not load texture\n");
         SDL_Texture *blocks_texture=SDL_CreateTextureFromSurface(renderer,blocks); 
+        if (!blocks_texture)
+            printf("could not turn image into texture\n");
         if (i == 0)
             textures = list_init(blocks_texture);
         else
@@ -73,8 +85,7 @@ void load_textures(struct gamestate *game)
     //struct SDL_Texture *textures =
     //    malloc(sizeof(struct SDL_Texture) * TEXTURE_MAX_AMOUNT);
    // if (!textures)
-   //     return;
-    
+   //     return; 
     game->textures = textures;
 }
 
@@ -160,15 +171,15 @@ void render_player(struct gamestate *game)
     
     struct SDL_Rect player_position = 
     {
-        BLOCK_SIZE * (player_tf.pos.x - player_tf.width / 2),
-        BLOCK_SIZE * (player_tf.pos.y - player_tf.height / 2),
-        BLOCK_SIZE * player_tf.width,
-        BLOCK_SIZE * player_tf.height
+        BLOCK_SIZE * (player_tf.pos.x - player_tf.width),
+        BLOCK_SIZE * (player_tf.pos.y - player_tf.height),
+        BLOCK_SIZE * player_tf.width  * 2,
+        BLOCK_SIZE * player_tf.height * 2
     };
     warnx("player position : %f/%f\n",player_tf.pos.x, player_tf.pos.y);
     warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
 
-    struct SDL_Rect sprite = get_sprite("player");
+    struct SDL_Rect sprite = get_sprite("idle");
     SDL_RenderCopy(renderer, texture, &sprite, &player_position); 
 }
 /*
