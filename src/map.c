@@ -46,6 +46,7 @@ struct map *load_map(const char *filename)
     {
         printf("opened file\n");
         char **ptr = malloc(sizeof(char*));
+        *ptr = NULL;
         size_t n = 64;
         char *blocks;
         size_t count = 0;

@@ -14,12 +14,10 @@ struct gamestate *gamestate_init(void)
 
 int main(void)
 {
-    /*
+    
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
         return 1;
-    */SDL_Init(SDL_INIT_EVERYTHING);
-    
-  //  SDL_CreateWindow("a", 0, 0, 600, 800, 0);
+    //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
     
