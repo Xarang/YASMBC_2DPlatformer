@@ -26,7 +26,7 @@ struct vector2 vector2_scale(struct vector2 vector, double k)
 {
     struct vector2 res;
     res.x = vector.x * k;
-    res.y = vector.e * k;
+    res.y = vector.y * k;
     return res;
 }
 

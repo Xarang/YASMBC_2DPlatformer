@@ -20,6 +20,6 @@ enum block_type
 
 struct map *load_map(const char *filename);
 enum block_type map_get_type(struct map *map, size_t i, size_t j);
-
+void map_print(struct map *map);
 
 #endif /*MAP_H_*/

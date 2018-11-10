@@ -10,6 +10,7 @@
 #include <SDL2/SDL_image.h>
 #include <err.h>
 #include <unistd.h>
+#include <math.h>
 
 //includes all the other headers..
 

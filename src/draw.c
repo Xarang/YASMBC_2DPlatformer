@@ -51,6 +51,8 @@ void init_window(struct gamestate *game)
 
 void render_map(struct gamestate *game)
 {
+    map_print(game->map);
+
     struct SDL_Rect grass =
     {
         0,
@@ -59,24 +61,41 @@ void render_map(struct gamestate *game)
         BLOCK_SIZE
     };
 
-    struct SDL_Rect select = 
+    struct SDL_Rect finish =
     {
-        0,
-        0,
+        BLOCK_SIZE * 2,
+        BLOCK_SIZE * 4,
         BLOCK_SIZE,
         BLOCK_SIZE
+
     };
 
     struct map *map = game->map;
-    size_t size = game->width * game->height;
+    size_t size = game->map->width * game->map->height;
     for (size_t i = 0; i < size; i++)
     {
-        for (size_t j = 0; j < size. j++)
+        for (size_t j = 0; j < size; j++)
         {
-                
+            char current = map_get_type(map, i, j);   
+
+            struct SDL_Rect select = 
+            {
+                BLOCK_SIZE * i,
+                BLOCK_SIZE * j,
+                BLOCK_SIZE,
+                BLOCK_SIZE
+            };
+            if (current == BLOCK)
+            {
+                SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
+                SDL_RenderPresent(game->renderer);
+            }
+            else if (current == FINISH)
+            {
+                SDL_RenderCopy(game->renderer, game->textures, &finish, &select);
+                SDL_RenderPresent(game->renderer);
+            }
         }
     }
-
-    SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
     SDL_RenderPresent(game->renderer);
 }
