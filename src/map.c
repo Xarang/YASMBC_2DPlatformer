@@ -114,7 +114,10 @@ enum block_type map_get_type(struct map *map, double i, double j)
         return BLOCK;
     else if (i >= map->width || j >= map->height)
         return BLOCK;
-    return map->blocks[map->width * j + i];
+    size_t i_int = i;
+    size_t j_int = j;
+    size_t pos = map->width * j_int + i_int;
+    return map->blocks[pos];
 }
 
 
