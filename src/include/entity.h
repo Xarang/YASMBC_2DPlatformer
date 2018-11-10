@@ -1,8 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include //input management
-#include "vector2.h"
+#include "game.h"
 
 #define NB_ENTITY_TYPE 3
 
@@ -27,7 +26,7 @@ struct entity
     struct transform transform;
     char is_grounded;
     //SDL thingies
-}
+};
 
 struct entity *create_entity(enum entity_type type, struct transform transform);
 struct entity *clone_entity(struct entity *entity);

@@ -59,9 +59,9 @@ static int is_in_hitbox(struct vector2 point, struct transform tf)
 
 int collides(struct transform tf1, struct transform tf2)
 {
-    struct vector2 corner = tf1.transform.pos;
+    struct vector2 corner = tf1.pos;
     corner.x -= tf1.width / 2.0;
-    corner.y -= tf1.heigh / 2.0;
+    corner.y -= tf1.height / 2.0;
 
     //Top left corner
     if (is_in_hitbox(corner, tf2))

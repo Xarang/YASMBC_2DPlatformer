@@ -4,8 +4,8 @@
 struct gamestate
 {
     struct map *map;
-    //player
-    //deltatime
+    struct entity *player;
+    uint64_t last_update_time;
     //inputs[]
     //SDL SurfaceS
     struct SDL_Window *window;

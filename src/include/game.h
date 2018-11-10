@@ -14,10 +14,13 @@
 
 //includes all the other headers..
 
+#define BLOCK_SIZE 60
 
 #include "vector2.h"
 #include "gamestate.h"
 #include "draw.h"
 #include "map.h"
+#include "entity.h"
+#include "time_utils.h"
 
 #endif /*GAME_H_*/

@@ -6,6 +6,15 @@ struct gamestate *gamestate_init(void)
     if (!new)
         return NULL;
     new->map = load_map("resources/maps/map_one");
+    struct transform player_pos =
+    {
+        BLOCK_SIZE / 2,
+        BLOCK_SIZE / 2,
+        { new->map->start.x, new->map->start.y },
+        { 0               , 0                }
+    };
+    new->player = create_entity(PLAYER, player_pos);
+    new->last_update_time = SDL_GetPerformanceFrequency();
     init_window(new);
     load_textures(new);
 

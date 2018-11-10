@@ -1,6 +1,5 @@
 #include "include/game.h"
 
-#define BLOCK_SIZE 60
 #define TEXTURE_MAX_AMOUNT 10
 
 

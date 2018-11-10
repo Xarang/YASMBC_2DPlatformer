@@ -43,6 +43,7 @@ static struct transform get_new_transform(struct entity *player,
     {
         tf.vel = vector2_scale(tf.vel, PLAYER_MAX_VEL / vel_norm);
     }
+<<<<<<< HEAD
     tf.pos = vector2.add(tf.pos, tf.vel, delta);
 
 }
@@ -69,4 +70,7 @@ void update_player(struct entity *player, struct gamestate *gamestate)
         new_tf.vel.x = 0.0;
         new_tf.pos.x = old_tf.pos.x;
     }
+=======
+    tf.pos = vector2_add(tf.pos, tf.vel, delta);
+>>>>>>> [FIX] Added time_utils, entity, player to build. Code Compiles.
 }
