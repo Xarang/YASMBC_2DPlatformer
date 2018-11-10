@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <SDL_mixer.h>
 
 struct gamestate
 {
@@ -14,6 +15,7 @@ struct gamestate
     struct SDL_Window *window;
     struct SDL_Renderer *renderer;
     struct SDL_Texture *textures;
+    Mix_Chunk **sfxs;
     size_t texture_count;
 };
 
