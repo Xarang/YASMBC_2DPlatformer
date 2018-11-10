@@ -1,2 +1,47 @@
- # VGRush
-Private repository for video game project rush @EPITA 09/11/2018 -> 11/11/2018
+# YASMBC
+
+> *Yet Another Super Meat Boy Clone*
+
+## Introduction
+
+**Yet Another Super Meat Boy Clone** (shortened as **YASMBC** for the remainder of this file) is a game made in 38 hours for EPITA's *Rush C* project. As the name indicates, it is a platforming game inspired by *Super Meat Boy* by Team Meat and as such, features similar gameplay mechanics.
+
+## Build
+
+### Requirements
+
+- gcc
+- SDL2 (`sdl2, sdl2_image, sdl2_mixer`)
+
+### Instructions
+
+After cloning the repository, run the following command in the repository's root:
+```make
+make
+```
+A binary called `main` should be created at the root of the repository.
+
+## Usage
+
+Run `./main` to launch the game.
+
+### Controls
+
+- `LeftArrow`: Move left
+- `RightArrow`: Move right
+- `UpArrow` or `Space`: Jump
+- `P`: Pause the game
+- `R`: Restart the current level
+- `Escape`: Quit the game
+
+## Sources
+
+- Musics:
+    - ☆ さくらなみきのかぜ ☆ by #ねここ14歳 (fether, Yamajet, ねこみみ魔法使い)
+    - ピアノ協奏曲第１番"蠍火"（なんでも吸い込むピンク色のための） by fether
+
+- Sound effects:
+    - Jump sound from Sonic
+    - Pause sound from Super Mario Bros.
+
+## Features
