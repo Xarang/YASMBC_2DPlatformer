@@ -69,9 +69,7 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     return acc;
 }
 
-static struct vector2 get_frot_acc(struct entity *player,
-                                   __attribute__((unused))struct gamestate 
-                                   *gamestate)
+static struct vector2 get_frot_acc(struct entity *player)
 {
     struct vector2 frot;
     frot.y = 0;
@@ -95,7 +93,7 @@ static struct transform get_new_transform(struct entity *player,
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
     acc = vector2_add(acc, get_move_acc(gamestate->inputs, gamestate), 1);
-    acc = vector2_add(acc, get_frot_acc(player, gamestate), 1);
+    acc = vector2_add(acc, get_frot_acc(player), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
     struct transform tf = player->transform;
