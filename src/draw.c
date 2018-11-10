@@ -8,23 +8,26 @@ enum texture_id
 {
     BACKGROUND = 0,
     MAP        = 1,
-    PLAYER_RDR = 2,
-    FOES       = 3
+    PLAYER_TXR = 2,
+    FOES       = 3,
+    UI         = 4
 };
 
 struct texture
 {
+    enum texture_id id;
     char *name;
     SDL_Rect rect;
 };
 
 struct texture textures[NB_TEXTURES] =
 {
-    { .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
-    { .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
+    { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
+    { .id = MAP, .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
                                  BLOCK_SIZE / 2, BLOCK_SIZE / 2 } },
-    { .name = "finish", .rect = { BLOCK_SIZE * 3, BLOCK_SIZE * 4,
-                                 BLOCK_SIZE,     BLOCK_SIZE }}
+    { .id = MAP, .name = "finish", .rect = { BLOCK_SIZE * 3, BLOCK_SIZE * 4,
+                                 BLOCK_SIZE,     BLOCK_SIZE }},
+    { .id = MAP, .name = "forestbg1", .rect = {0, 0, 640, 480 }}
 };
 
 struct SDL_Rect get_sprite(const char *name)
@@ -42,7 +45,7 @@ struct SDL_Rect get_sprite(const char *name)
 
 const char* ressource_files[NB_TEXTURES] = 
 {
-    "resources/sprites/tiles.png",
+    "resources/sprites/forestbg.png",
     "resources/sprites/tiles.png",
     "resources/sprites/tiles.png",
     "resources/sprites/tiles.png",
@@ -92,6 +95,23 @@ void init_window(struct gamestate *game)
     game->renderer = renderer;
 }
 
+void render_background(struct gamestate *game)
+{
+    SDL_Renderer *renderer = game->renderer;
+    SDL_Texture *texture = list_get_n(game->textures, BACKGROUND);
+    if (!texture)
+        warnx("render_background : texture not found");
+    struct SDL_Rect select =
+    {
+        0,
+        0,
+        game->map->width  * BLOCK_SIZE,
+        game->map->height * BLOCK_SIZE
+    };
+    struct SDL_Rect sprite = get_sprite("forestbg1");
+    SDL_RenderCopy(renderer, texture, &sprite, &select);
+}
+
 void render_map(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
@@ -135,7 +155,7 @@ void render_map(struct gamestate *game)
 void render_player(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
-    SDL_Texture *texture = game->textures->data;
+    SDL_Texture *texture = list_get_n(game->textures, PLAYER_TXR);
     struct transform player_tf = game->player->transform;
     
     struct SDL_Rect player_position = 
@@ -151,10 +171,21 @@ void render_player(struct gamestate *game)
     struct SDL_Rect sprite = get_sprite("player");
     SDL_RenderCopy(renderer, texture, &sprite, &player_position); 
 }
+/*
+void render_UI(struct gamestate *game)
+{
+    SDL_Renderer *renderer = game->renderer;
+    SDL_Texture *texture = list_get_n(game->textures, UI);
 
 
+    
+
+
+}
+*/
 void render_game(struct gamestate *game)
 {
+    render_background(game);
     render_map(game);
     render_player(game);
     SDL_RenderPresent(game->renderer);
