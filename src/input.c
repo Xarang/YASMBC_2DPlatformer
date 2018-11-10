@@ -39,8 +39,10 @@ void get_input(int *inputs, struct gamestate *game)
     if (state[SDL_SCANCODE_ESCAPE])
         inputs[EXIT]++;
     if (state[SDL_SCANCODE_R])
+    {
         if (restart_val)
             inputs[RESTART] = restart_val;
         inputs[RESTART]++;
+    }
     game->inputs = inputs;
 }
