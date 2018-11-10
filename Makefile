@@ -6,9 +6,9 @@ LDLIBS= -lm
 
 EXEC=main
 
-CFLAGS += -g
+CFLAGS += -g $(shell sdl2-config --cflags)
 
-LDLIBS += -lSDL2 -lSDL2_image 
+LDLIBS += $(shell sdl2-config --libs) -lSDL2_image
 
 all: $(EXEC)
 

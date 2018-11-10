@@ -2,15 +2,16 @@
 #include <SDL.h>
 #include "input.h"
 
-static void reset_array(int inputs[NB_ACTION])
+static void reset_array(int *inputs)
 {
     for (size_t i = 0; i < NB_ACTION; i++)
         inputs[i] = 0;
 }
 
-void get_input(int inputs[NB_ACTION], struct gamestate *game)
+void get_input(int *inputs, struct gamestate *game)
 {
     reset_array(inputs);
+    SDL_PumpEvents();
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_LEFT])
         inputs[LEFT]++;

@@ -1,6 +1,6 @@
 #include "update.h"
 
-void update(struct gamestate *gamestate, int inputs[NB_ACTION])
+void update(struct gamestate *gamestate, int *inputs)
 {
     if(inputs[PAUSE])
     {

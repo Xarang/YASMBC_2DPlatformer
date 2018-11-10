@@ -3,6 +3,6 @@
 
 #include "input.h"
 
-void update(struct gamestate *gamestate, enum action action);
+void update(struct gamestate *gamestate, int *inputs);
 
 #endif /* ! UPDATE_H */

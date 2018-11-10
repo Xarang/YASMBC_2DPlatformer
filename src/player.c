@@ -9,7 +9,7 @@
 #define PLAYER_LATERAL_ACC 10
 #define PLAYER_RUN_FACTOR 1.3
 
-static struct vector2 get_move_acc(int inputs[NB_ACTION])
+static struct vector2 get_move_acc(int *inputs)
 {
     struct vector2 acc = { 0, 0 };
     if (inputs[LEFT])

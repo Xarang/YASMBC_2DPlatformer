@@ -15,6 +15,6 @@ enum action
     RESTART
 };
 
-void get_input(int inputs[NB_ACTION], struct gamestate *game);
+void get_input(int *inputs, struct gamestate *game);
 
 #endif /* ! INPUT_H */

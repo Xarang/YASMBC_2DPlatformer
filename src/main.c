@@ -1,4 +1,5 @@
 #include "game.h"
+#include "update.h"
 
 struct gamestate *gamestate_init(void)
 {
@@ -23,17 +24,26 @@ struct gamestate *gamestate_init(void)
 
 int main(void)
 {
-    
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
         return 1;
     //SDL_Init(SDL_INIT_EVERYTHING);
 
     struct gamestate *game = gamestate_init();
     render_map(game);
-   
-    sleep(50000);
-    
-    game = game;
+    int inputs[NB_ACTION] =
+    {
+        0
+    };
+    while (1)
+    {
+        get_input(inputs, game);
+        /* for (size_t i = 0; i < NB_ACTION; i++) */
+        /* { */
+        /*     if (inputs[i]) */
+        /*         printf("Button pressed: %ld\n", i); */
+        /* } */
+        //render_map(game);
+    }
     SDL_Quit();
     return 0;
 }
