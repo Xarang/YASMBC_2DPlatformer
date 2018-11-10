@@ -38,6 +38,13 @@ int main(void)
     {
         0
     };
+
+    Mix_Chunk *sfxs[NB_SFX] =
+    {
+        0
+    };
+    init_sfx(game, sfxs);
+
     while (1)
     {
         get_input(inputs, game);
@@ -47,11 +54,14 @@ int main(void)
         {
             if (game->inputs[i])
                 printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
+            if (game->inputs[JUMP] == 1)
+                Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0);
         }
         //update(game, inputs);
         render_map(game);
         SDL_Delay(1);
     }
+    free_sfx(game->sfxs);
     Mix_FreeMusic(music);
     close_audio();
     SDL_Quit();

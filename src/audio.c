@@ -16,10 +16,28 @@ int init_audio(void)
     return 0;
 }
 
-/* void init_sfx(struct gamestate *game) */
-/* { */
+void init_sfx(struct gamestate *game, Mix_Chunk **sfxs)
+{
+    const char* sfx_list[NB_SFX] =
+    {
+        "resources/audio/jump.wav"
+    };
+    for (size_t i = 0; i < NB_SFX; i++)
+    {
+        Mix_Chunk *sfx = Mix_LoadWAV(sfx_list[i]);
+        if (!sfx)
+            fprintf(stderr, "Error while loading SFX: %s\n", Mix_GetError());
+        else
+            sfxs[i] = sfx;
+    }
+    game->sfxs = sfxs;
+}
 
-/* } */
+void free_sfx(Mix_Chunk **sfxs)
+{
+    for (size_t i = 0; i < NB_SFX; i++)
+        Mix_FreeChunk(sfxs[i]);
+}
 
 Mix_Music *play_music(const char *file)
 {
