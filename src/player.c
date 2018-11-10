@@ -11,10 +11,10 @@
 #define PLAYER_MAX_VEL 0.1
 #define PLAYER_JUMP_ACC (-0.0004)
 #define PLAYER_LATERAL_ACC 0.00001
-#define PLAYER_RUN_FACTOR 1.3
+#define PLAYER_RUN_FACTOR 2.0
 
-#define PLAYER_AIR_FROT_FACTOR 0.0
-#define PLAYER_LATERAL_FROT_FACTOR -0.0015
+#define PLAYER_LATERAL_AIR_FROT_FACTOR (-0.0001)
+#define PLAYER_LATERAL_GROUND_FROT_FACTOR -0.0015
 
 static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
@@ -35,7 +35,7 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     }
     if (inputs[RUN])
     {
-        acc = vector2_scale(acc, PLAYER_RUN_FACTOR);
+        acc.x *= PLAYER_RUN_FACTOR;
     }
     return acc;
 }
@@ -46,14 +46,13 @@ static struct vector2 get_frot_acc(struct entity *player,
     struct vector2 frot;
     if (player->is_grounded)
     {
-        frot.x = player->transform.vel.x * PLAYER_LATERAL_FROT_FACTOR;
+        frot.x = player->transform.vel.x * PLAYER_LATERAL_GROUND_FROT_FACTOR;
     }
     else
     {
-        frot.x = 0;
+        frot.x = player->transform.vel.x * PLAYER_LATERAL_AIR_FROT_FACTOR;
     }
     frot.y = 0;
-    frot = vector2_add(frot, player->transform.vel, PLAYER_AIR_FROT_FACTOR);
     return frot;
 }
 
@@ -87,7 +86,7 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     if (map_get_type(gamestate->map, old_tf.pos.x, new_tf.pos.y) == BLOCK)
     {
         //If the new vertical position is lower
-        if (new_tf.pos.y >= old_tf.pos.x)
+        if (new_tf.pos.y >= old_tf.pos.y)
         {
             player->is_grounded = 1;
         }

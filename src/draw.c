@@ -137,7 +137,6 @@ void render_map(struct gamestate *game)
             if (current == BLOCK)
             {
                 sprite = get_sprite("grass");
-                warnx("found block in %zu/%zu\n", i, j);
             }
             else if (current == FINISH)
             {
