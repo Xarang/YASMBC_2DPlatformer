@@ -8,7 +8,7 @@ void update(struct gamestate *gamestate, int *inputs)
     if(inputs[PAUSE] == 1)
     {
         //Pause game
-        Mix_PlayChannel(1, gamestate->sfxs[SFX_PAUSE], 0);
+        play_sfx(SFX_PAUSE, gamestate);
         if (gamestate->is_paused)
             Mix_ResumeMusic();
         else

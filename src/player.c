@@ -47,7 +47,7 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 
     if (inputs[JUMP] && (player->is_grounded || player->is_walled))
     {
-        Mix_PlayChannel(1, gamestate->sfxs[SFX_JUMP], 0);
+        play_sfx(SFX_JUMP, gamestate);
         if (player->is_grounded)
         {
             acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
