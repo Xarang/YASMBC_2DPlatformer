@@ -144,3 +144,8 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     }
     player->transform = new_tf;
 }
+
+void kill_player(struct entity *player, struct gamestate *gamestate)
+{
+
+}

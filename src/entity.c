@@ -22,17 +22,6 @@ struct entity *create_entity(enum entity_type type, struct transform transform)
     return res;
 }
 
-struct entity *clone_entity(struct entity *entity)
-{
-    struct entity *clone = create_entity(entity->type, entity->transform);
-    if (!clone)
-    {
-        fprintf(stderr, "Could not clone struct entity\n");
-        return NULL;
-    }
-    return clone;
-}
-
 void destroy_entity(struct entity *entity)
 {
     free(entity);
