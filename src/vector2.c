@@ -1,40 +1,36 @@
 #include "include/vector2.h"
 
-void vector2_add(struct vector2 *vector, struct vector2 v1, struct vector2 v2, double k)
+struct vector2 vector2_init(double x, double y)
 {
-    vector->x = v1.x + v2.x * k;
-    vector->y = v1.y + v2.y * k;
+    struct vector2 res = { x, y };
+    return res;
 }
 
-void vector2_multiply(struct vector2 *vector, struct vector2 v1, struct vector2 v2)
+struct vector2 vector2_add(struct vector2 v1, struct vector2 v2, double k)
 {
-    vector->x = v1.x * v2.x;
-    vector->y = v1.y * v2.y;
+    struct vector2 res;
+    res.x = v1.x + v2.x * k;
+    res.y = v1.y + v2.y * k;
+    return res;
 }
 
-void vector2_scale(struct vector2 *vector, double k)
+struct vector2 vector2_multiply(struct vector2 v1, struct vector2 v2)
 {
-    vector->x *= k;
-    vector->y *= k;
+    struct vector2 res;
+    res.x = v1.x * v2.x;
+    res.y = v1.y * v2.y;
+    return res;
 }
 
-void vector2_cpy(struct vector2 *v1, struct vector2 v2)
+struct vector2 vector2_scale(struct vector2 vector, double k)
 {
-    v1->x = v2.x;
-    v1->y = v2.y;
+    struct vector2 res;
+    res.x = vector.x * k;
+    res.y = vector.e * k;
+    return res;
 }
 
-/*
-double vector2_len(struct vector2 v)
+double vector2_norm(struct vector2 v)
 {
     return sqrt(v.x * v.x + v.y * v.y);
 }
-*/
-
-/*
-void vector2_normalize(struct vector2 *v)
-{
-    double len = vector2_len(*v);
-    vector2_scale(v, 1/len);
-}
-*/
