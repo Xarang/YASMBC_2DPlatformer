@@ -48,7 +48,7 @@ struct map *load_map(const char *filename)
         char **ptr = malloc(sizeof(char*));
         *ptr = NULL;
         size_t n = 64;
-        char *blocks;
+        enum block_type *blocks;
         size_t count = 0;
         while (1)
         { 
@@ -71,7 +71,7 @@ struct map *load_map(const char *filename)
                 //printf("h detected : %zu\n", h);
                 size_t w = new->width;
                 //printf("w detected : %zu\n", w);
-                blocks = malloc(sizeof(char) * h * w);
+                blocks = malloc(sizeof(enum block_type) * h * w);
                 if (!blocks)
                 {
                     free(new);
@@ -110,16 +110,7 @@ void map_print(struct map *map)
 
 enum block_type map_get_type(struct map *map, size_t i, size_t j)
 {
-    return *(map->blocks + map->width * j + i);
+    return map->blocks[map->width * j + i];
 }
 
-/*
-int main(int argc, char **argv)
-{
-    if (argc != 2)
-        return 1;
-    struct map *map = load_map(*(argv + 1));
-    map_print(map);
-    return 0;
-}
-*/
+

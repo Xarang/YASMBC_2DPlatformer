@@ -22,7 +22,7 @@ int main(void)
     struct gamestate *game = gamestate_init();
     render_map(game);
    
-    sleep(5);
+    sleep(50000);
     
     game = game;
     SDL_Quit();

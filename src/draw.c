@@ -51,8 +51,6 @@ void init_window(struct gamestate *game)
 
 void render_map(struct gamestate *game)
 {
-    map_print(game->map);
-
     struct SDL_Rect grass =
     {
         0,
@@ -63,7 +61,7 @@ void render_map(struct gamestate *game)
 
     struct SDL_Rect finish =
     {
-        BLOCK_SIZE * 2,
+        BLOCK_SIZE * 3,
         BLOCK_SIZE * 4,
         BLOCK_SIZE,
         BLOCK_SIZE
@@ -71,13 +69,15 @@ void render_map(struct gamestate *game)
     };
 
     struct map *map = game->map;
-    size_t size = game->map->width * game->map->height;
-    for (size_t i = 0; i < size; i++)
-    {
-        for (size_t j = 0; j < size; j++)
-        {
-            char current = map_get_type(map, i, j);   
 
+   // struct SDL_Rect *rect[map->width][map->height];
+    // size_t size = game->map->width * game->map->height;
+    map_print(map);
+    for (size_t i = 0; i < map->width; i++)
+    {
+        for (size_t j = 0; j < map->height; j++)
+        {
+            enum block_type current = map_get_type(map, i, j);   
             struct SDL_Rect select = 
             {
                 BLOCK_SIZE * i,
@@ -87,13 +87,13 @@ void render_map(struct gamestate *game)
             };
             if (current == BLOCK)
             {
-                SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
-                SDL_RenderPresent(game->renderer);
+                warnx("found block in %zu/%zu\n", i, j);
+                int try = SDL_RenderCopy(game->renderer, game->textures, &grass, &select);
+                warnx("insert in renderer : %d : %d/%d\n", try, select.x, select.y);
             }
             else if (current == FINISH)
             {
                 SDL_RenderCopy(game->renderer, game->textures, &finish, &select);
-                SDL_RenderPresent(game->renderer);
             }
         }
     }
