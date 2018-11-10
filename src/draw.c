@@ -3,6 +3,8 @@
 //should merge the two values below
 
 #define NB_TEXTURES 5
+#define NB_SPRITES 8
+
 
 enum texture_id
 {
@@ -20,9 +22,9 @@ struct texture
     SDL_Rect rect;
 };
 
-#define PLAYER_SPRITE_LEN 150
+#define PLAYER_SPRITE_LEN 165
 
-struct texture textures[] =
+struct texture textures[NB_SPRITES] =
 {
     { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE,BLOCK_SIZE } },
     { .id = MAP, .name = "player",.rect = { BLOCK_SIZE * 7, BLOCK_SIZE * 5,
@@ -36,12 +38,16 @@ struct texture textures[] =
     { .id = PLAYER_TXR, .name = "jump", .rect = {PLAYER_SPRITE_LEN * 5 + 1,
                                                  PLAYER_SPRITE_LEN * 1 + 1,
                                                  PLAYER_SPRITE_LEN - 1,
-                                                 PLAYER_SPRITE_LEN - 1}}
+                                                 PLAYER_SPRITE_LEN - 1}},
+    { .id  = PLAYER_TXR, .name = "full", .rect = {1, PLAYER_SPRITE_LEN * 2,
+                                                    PLAYER_SPRITE_LEN - 1,
+                                                    PLAYER_SPRITE_LEN - 1}},
+    { .id = UI, .name = "veil", .rect = { 0, 0, 1, 1 }}
 };
 
 struct SDL_Rect get_sprite(const char *name)
 {
-    for (size_t i = 0; i < NB_TEXTURES; i++)
+    for (size_t i = 0; i < NB_SPRITES; i++)
     {
         if (strcmp(name, textures[i].name) == 0)
         {
@@ -65,11 +71,11 @@ void load_textures(struct gamestate *game)
 {
     warnx("entered load_textures");
     game->texture_count = 0;
+    struct SDL_Renderer *renderer = game->renderer;
     //struct SDL_Window *window = game->window;
     struct list *textures;
-    for (size_t i = 0; i < NB_TEXTURES; i++)
+    for (size_t i = 0; i < NB_TEXTURES - 1; i++)
     {
-        struct SDL_Renderer *renderer = game->renderer;
         SDL_Surface *blocks = IMG_Load(ressource_files[i]);
         if (!blocks)
             printf("could not load texture\n");
@@ -81,11 +87,18 @@ void load_textures(struct gamestate *game)
         else
             list_add(textures, blocks_texture);
     }
-    
-    //struct SDL_Texture *textures =
-    //    malloc(sizeof(struct SDL_Texture) * TEXTURE_MAX_AMOUNT);
-   // if (!textures)
-   //     return; 
+  
+
+    SDL_Texture *veil_texture =SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGBA8888,
+                                            SDL_TEXTUREACCESS_TARGET, 1, 1);
+
+    SDL_SetTextureBlendMode(veil_texture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderTarget(renderer, veil_texture);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+    SDL_SetRenderDrawColor(renderer, 127, 127, 127, 127);
+    SDL_RenderFillRect(renderer, NULL);
+
+    list_add(textures, veil_texture);
     game->textures = textures;
 }
 
@@ -170,34 +183,51 @@ void render_player(struct gamestate *game)
     
     struct SDL_Rect player_position = 
     {
-        BLOCK_SIZE * (player_tf.pos.x - player_tf.width),
+        BLOCK_SIZE * (player_tf.pos.x - player_tf.width / 2),
         BLOCK_SIZE * (player_tf.pos.y - player_tf.height),
-        BLOCK_SIZE * player_tf.width  * 2,
-        BLOCK_SIZE * player_tf.height * 2
+        BLOCK_SIZE * player_tf.width,
+        BLOCK_SIZE * player_tf.height
     };
     warnx("player position : %f/%f\n",player_tf.pos.x, player_tf.pos.y);
     warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
 
-    struct SDL_Rect sprite = get_sprite("idle");
+    struct SDL_Rect sprite = get_sprite("full");
     SDL_RenderCopy(renderer, texture, &sprite, &player_position); 
 }
-/*
+
+
 void render_UI(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
     SDL_Texture *texture = list_get_n(game->textures, UI);
+    struct map *map = game->map;
+   
+    SDL_SetRenderTarget(renderer, NULL);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
 
+    struct SDL_Rect sprite = get_sprite("veil");
+    printf("veil rect : %d/%d/%d/%d\n", sprite.x, sprite.y, sprite.w, sprite.h);
+    struct SDL_Rect screen =
+    {
+        0,
+        0,
+        map->width,
+        map->height
+    };
 
-    
-
-
+   // if (game->is_paused)
+   // {
+        SDL_RenderCopy(renderer, texture, &sprite, &screen); 
+  //  }
 }
-*/
+
 void render_game(struct gamestate *game)
 {
     render_background(game);
     render_map(game);
     render_player(game);
+    render_UI(game);
     SDL_RenderPresent(game->renderer);
 }
 
