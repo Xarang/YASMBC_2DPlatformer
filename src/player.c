@@ -33,19 +33,18 @@ static struct transform get_new_transform(struct entity *player,
                                           struct gamestate *gamestate)
 {
     struct vector2 acc = { 0, -PLAYER_G_FORCE };
-    struct vector2 acc = vector2_add(acc, get_move_acc(gamestate->inputs), 1);
+    acc = vector2_add(acc, get_move_acc(gamestate->inputs), 1);
     double delta = delta_time(&gamestate->last_update_time);
 
-    struct transform tf = entity->transform;
+    struct transform tf = player->transform;
     tf.vel = vector2_add(tf.vel, acc, delta);
     double vel_norm = vector2_norm(tf.vel);
     if (vel_norm > PLAYER_MAX_VEL)
     {
         tf.vel = vector2_scale(tf.vel, PLAYER_MAX_VEL / vel_norm);
     }
-<<<<<<< HEAD
-    tf.pos = vector2.add(tf.pos, tf.vel, delta);
-
+    tf.pos = vector2_add(tf.pos, tf.vel, delta);
+    return tf;
 }
 
 void update_player(struct entity *player, struct gamestate *gamestate)
@@ -57,20 +56,18 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     if (map_get_type(gamestate->map, old_tf.pos.x, new_tf.pos.y) == BLOCK)
     {
         //If the new vertical position is lower
-        if (new_tf.pos.y >= old_tf.posx)
+        if (new_tf.pos.y >= old_tf.pos.x)
         {
             player->is_grounded = 1;
         }
-        neW_tf.vel.y = 0.0;
+        new_tf.vel.y = 0.0;
         new_tf.pos.y = old_tf.pos.y;
     }
     //If the new horizontal position is in a block
-    if (map_get_type(famestate->map, new_tf.pos.x, old_tf.y) == BLOCK)
+    if (map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y) == BLOCK)
     {
         new_tf.vel.x = 0.0;
         new_tf.pos.x = old_tf.pos.x;
     }
-=======
-    tf.pos = vector2_add(tf.pos, tf.vel, delta);
->>>>>>> [FIX] Added time_utils, entity, player to build. Code Compiles.
+    player->transform = new_tf;
 }

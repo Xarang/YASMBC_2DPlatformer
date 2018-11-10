@@ -17,6 +17,7 @@
 #define BLOCK_SIZE 60
 
 #include "vector2.h"
+#include "input.h"
 #include "gamestate.h"
 #include "draw.h"
 #include "map.h"
