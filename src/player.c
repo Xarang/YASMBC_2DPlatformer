@@ -15,6 +15,7 @@
 
 #define PLAYER_LATERAL_AIR_FROT_FACTOR (-0.0001)
 #define PLAYER_LATERAL_GROUND_FROT_FACTOR -0.0015
+#define PLAYER_INERTIA_FACTOR (-0.002)
 
 static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
@@ -23,10 +24,18 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
     if (inputs[LEFT])
     {
         acc = vector2_add(acc, vector2_init(1, 0), -PLAYER_LATERAL_ACC);
+        if (!inputs[RIGHT] && player->transform.vel.x >= 0.0)
+        {
+            acc.x += player->transform.vel.x * PLAYER_INERTIA_FACTOR;
+        }
     }
     if (inputs[RIGHT])
     {
         acc = vector2_add(acc, vector2_init(1, 0), PLAYER_LATERAL_ACC);
+        if (!inputs[LEFT] && player->transform.vel.x <= 0.0)
+        {
+            acc.x += player->transform.vel.x * PLAYER_INERTIA_FACTOR;
+        }
     }
     if (inputs[JUMP] && player->is_grounded)
     {
