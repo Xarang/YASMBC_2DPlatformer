@@ -16,7 +16,7 @@ struct gamestate *gamestate_init(void)
     };
     new->player = create_entity(PLAYER, player_pos);
     new->last_update_time = SDL_GetPerformanceFrequency();
-
+    new->is_paused = 0;
     init_window(new);
     warnx("window created");
     load_textures(new);
@@ -57,14 +57,14 @@ int main(void)
         get_input(inputs, game);
         if (game->inputs[EXIT])
             break;
-        for (size_t i = 0; i < NB_ACTION; i++)
-        {
-            if (game->inputs[i])
-                printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
-            if (game->inputs[JUMP] == 1)
-                Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0);
-        }
-        //update(game, inputs);
+        /* for (size_t i = 0; i < NB_ACTION; i++) */
+        /* { */
+        /*     if (game->inputs[i]) */
+        /*         printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]); */
+        /*     if (game->inputs[JUMP] == 1) */
+        /*         Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0); */
+        /* } */
+        update(game, inputs);
         render_map(game);
         SDL_Delay(1);
     }
