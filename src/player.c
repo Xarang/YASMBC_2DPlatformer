@@ -12,7 +12,7 @@
 
 #define PLAYER_G_FORCE (-0.00001)
 #define PLAYER_MAX_VEL 0.1
-#define PLAYER_JUMP_ACC (-0.0004)
+#define PLAYER_JUMP_ACC (-0.00025)
 #define PLAYER_LATERAL_ACC 0.00001
 #define PLAYER_RUN_FACTOR 2.0
 
@@ -22,6 +22,9 @@
 #define PLAYER_INERTIA_FACTOR (-0.002)
 #define PLAYER_WALL_JUMP_X_FACTOR 0.005
 #define PLAYER_WALL_JUMP_Y_FACTOR 0.009
+
+#define PLAYER_JUMP_HOLD_ACC (-0.00001)
+#define PLAYER_MAX_JUMP_FRAME 20
 
 static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 {
@@ -46,19 +49,26 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
         }
     }
 
-    if (inputs[JUMP] && (player->is_grounded || player->is_walled))
+    if (inputs[JUMP])
     {
-        play_sfx(SFX_JUMP, gamestate);
-        if (player->is_grounded)
+        if (player->is_grounded || player->is_walled)
         {
-            acc = vector2_add(acc, vector2_init(0, 1), PLAYER_JUMP_ACC);
+            play_sfx(SFX_JUMP, gamestate);
+            if (player->is_grounded)
+            {
+                acc.y += PLAYER_JUMP_ACC;
+            }
+            else
+            {
+                float val = sqrt(2) / 2;
+                player->transform.vel.x = val * PLAYER_WALL_JUMP_X_FACTOR *
+                    -player->wall_dir;
+                player->transform.vel.y = -val * PLAYER_WALL_JUMP_Y_FACTOR;
+            }
         }
-        else
+        else if (inputs[JUMP] < PLAYER_MAX_JUMP_FRAME)
         {
-            float val = sqrt(2) / 2;
-            player->transform.vel.x = val * PLAYER_WALL_JUMP_X_FACTOR *
-                                      -player->wall_dir;
-            player->transform.vel.y = -val * PLAYER_WALL_JUMP_Y_FACTOR;
+            acc.y += PLAYER_JUMP_HOLD_ACC;
         }
     }
 
