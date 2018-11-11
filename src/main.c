@@ -98,12 +98,13 @@ int main(void)
     init_sfx(game, sfxs);
 
     int map = 0;
+    enum game_status status = RUNNING;
     while (map < NB_MAPS)
     {
         get_input(inputs, game);
         if (game->inputs[EXIT])
             break;
-        enum game_status status = update(game, inputs);
+        status = update(game, inputs);
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
@@ -112,6 +113,18 @@ int main(void)
         {
             game->music = switch_map(game, &map, game->music);
         }
+    }
+    if (status == WIN)
+    {
+        Mix_Music *fanfare = play_music("resources/audio/win.mp3", 1);
+        while (1)
+        {
+            SDL_PumpEvents();
+            const Uint8 *state = SDL_GetKeyboardState(NULL);
+            if (state[SDL_SCANCODE_RETURN])
+                break;
+        }
+        Mix_FreeMusic(fanfare);
     }
     exit_game(game);
     return 0;

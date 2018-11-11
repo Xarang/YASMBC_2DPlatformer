@@ -22,4 +22,5 @@
 - [ ] Display text when paused or winning
 - [ ] Death counter
 - [ ] Timer
-- [ ] Not instantly quitting the game when completing all of the levels
+- [x] Not instantly quitting the game when completing all of the levels
+- [ ] Scrolling camera
