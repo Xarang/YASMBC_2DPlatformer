@@ -42,16 +42,11 @@ void parse_entities(FILE *f, struct map *map, int n)
    // char **ptr = malloc(sizeof(char*));
    // if (!ptr)
    //     return;
+    struct list *entities = NULL;
     char *ptr = NULL;
     map->nb_entities = n;
     int parsing_entity = 0;
     size_t a = 0;
-    struct entity *entities = malloc(sizeof(struct entity) * n);
-    if (!entities)
-    {
-        free(ptr);
-        return;
-    }
     while (n > 0)
     {
         warnx("entered while");
@@ -66,7 +61,6 @@ void parse_entities(FILE *f, struct map *map, int n)
             parsing_entity = 1;
             ptr = NULL;
             a = 0;
-            continue;
         }
         if (parsing_entity)
         {
@@ -90,6 +84,7 @@ void parse_entities(FILE *f, struct map *map, int n)
                 if (i < 5)
                 {
                     val = atof(ptr);
+                    printf("parsed val %f\n", val);
                 }
                 if (i == 0)
                     type = val; 
@@ -104,10 +99,20 @@ void parse_entities(FILE *f, struct map *map, int n)
                 else
                 {
                     struct vector2 pos = { x, y };
-                    struct vector2 spd = { 0, 0 };
+                    struct vector2 spd = { FOE_1_X_VEL, FOE_1_Y_VEL };
                     struct transform transform = { h, w, pos, spd};
                     struct entity *entity = create_entity(type, transform);
-                    *(entities + n) = *entity;
+                    if (!entities)
+                    {
+                        entities = list_init(entity);
+                        printf("crated entity list\n");
+                    }
+                    else
+                    {
+                        list_add(entities, entity);
+                        printf("added entity to list\n");
+                    }
+                    
                     free(ptr);
                     ptr = NULL;
                     a = 0;
@@ -118,9 +123,6 @@ void parse_entities(FILE *f, struct map *map, int n)
             }
         }
     }
-    warnx("exited while");
-   // if (ptr)
-   //     free(ptr);
     map->entities = entities;
     warnx("exiting entity parsing");
 }
@@ -131,6 +133,7 @@ struct map *load_map(const char *filename)
     struct map *new = malloc(sizeof(struct map));
     if (!new)
         return NULL;
+    new->nb_entities = 1; //change this to 0
     FILE *f = fopen(filename, "r");
     if (!f)
     {
@@ -151,10 +154,10 @@ struct map *load_map(const char *filename)
         while (1)
         { 
             size_t try = getline(ptr, &n, f);
-            if (count == h + 4)
-                break;
             *(*ptr + try - 1) = '\0';
             printf("parsed line : %s\n", *ptr);
+            if (count == h + 4)
+                break;
             if (count == 0)
                 new->width = atoi(*ptr);
             else if (count == 1)
@@ -190,10 +193,11 @@ struct map *load_map(const char *filename)
             }
             count++;
         }
+        printf("atoi ptr : %d\n", atoi(*ptr));
         if (atoi(*ptr) != 0)
         {
             printf("detected entities : %d\n", atoi(*ptr));
-       //     parse_entities(f, new, atoi(*ptr));
+            parse_entities(f, new, atoi(*ptr));
         }
         new->blocks = blocks; 
         if (ptr)

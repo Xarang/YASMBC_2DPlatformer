@@ -92,7 +92,8 @@ int main(void)
     init_sfx(game, sfxs);
 
     int map = 0;
-    while (1)
+    int count = 1;
+    while (count > 0)
     {
         get_input(inputs, game);
         if (game->inputs[EXIT])
@@ -114,7 +115,7 @@ int main(void)
             if (map >= NB_MAPS)
                 break;
         }
-
+    //count--;
 //        SDL_Delay(16);
     }
     free_sfx(game->sfxs);

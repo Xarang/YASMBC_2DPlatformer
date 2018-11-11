@@ -24,6 +24,8 @@
 #include "entity.h"
 #include "time_utils.h"
 #include "audio.h"
+#include "foe_1.h"
+#include "foe_2.h"
 
 #include "list.h"
 

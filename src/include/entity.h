@@ -47,5 +47,6 @@ void destroy_entity(struct entity *entity);
 enum entity_status update_entity(struct entity *entity,
                                  struct gamestate *gamestate);
 int collides(struct transform tf1, struct transform tf2);
+void print_entity(struct entity *entity);
 
 #endif /* ! ENTITY_H */

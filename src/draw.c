@@ -277,11 +277,20 @@ void render_entities(struct gamestate *game)
 {
     warnx("entered entities rendering");
     SDL_Renderer *renderer = game->renderer;
-    SDL_Texture *texture = list_get_n(game->textures, FOES); 
+    printf("will try to get texture\n");
+    SDL_Texture *texture = list_get_n(game->textures, FOES);
+    warnx("got texture");
     struct map *map = game->map;
+    struct list *entities = map->entities;
+    if (!entities)
+        warnx("entitites null");
+    
     for (size_t i = 0; i < map->nb_entities; i++)
     {
-        struct entity *current = map->entities + i;
+        struct entity *current = entities->data;
+        print_entity(current);
+        if (!current)
+            warnx("entity null");
         char *name = "foe";
         switch (current->type)
         {
@@ -295,11 +304,18 @@ void render_entities(struct gamestate *game)
                 name = "gagaga";
                 break;
         }
+        name = name;
         struct SDL_Rect sprite = get_sprite(name);
         struct transform transform = current->transform;
-        struct SDL_Rect pos = { transform.pos.x, transform.pos.y,
-                                transform.width, transform.height };
+        printf("transform get\n");
+        struct SDL_Rect pos = { transform.pos.x * BLOCK_SIZE,
+                                transform.pos.y * BLOCK_SIZE,
+                                transform.width * BLOCK_SIZE, 
+                                transform.height* BLOCK_SIZE };
+        printf("sdl rec created : pos: %d/%d scale : %d/%d\n",
+                                pos.x, pos.y, pos.w, pos.h);
         SDL_RenderCopy(renderer, texture, &sprite, &pos);
+        entities = entities->next;
     }
     warnx("exit render entities..");
 }
@@ -310,7 +326,7 @@ void render_game(struct gamestate *game)
     render_map(game);
     render_player(game);
     warnx("will try to render entities..");
-    //render_entities(game);
+    render_entities(game);
     render_UI(game);
     SDL_RenderPresent(game->renderer);
 }

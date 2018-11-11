@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include "vector2.h"
 
+
+
 enum block_type
 {
     VOID  = 0,
@@ -17,7 +19,7 @@ struct map
 {
     size_t width;
     size_t height;
-    struct entity *entities;
+    struct list *entities;
     size_t nb_entities;
     enum block_type *blocks;
     struct vector2 start;
