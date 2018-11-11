@@ -63,7 +63,6 @@ enum game_status update(struct gamestate *gamestate, int *inputs)
                                                          gamestate);
 
         update_entity_states(gamestate->map);
-#if 1
         size_t nb_entities = gamestate->map->nb_entities;
         struct list *entities = gamestate->map->entities;
         struct entity *entity;
@@ -72,7 +71,6 @@ enum game_status update(struct gamestate *gamestate, int *inputs)
             entity = list_get_n(entities, i);
             update_entity(entity, gamestate);
         }
-#endif
         return get_game_status(player_status);
     }
     return RUNNING;

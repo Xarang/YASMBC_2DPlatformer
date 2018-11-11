@@ -54,6 +54,7 @@ enum entity_status update_entity(struct entity *entity, struct gamestate *gamest
     case PLAYER:
         return update_player(entity, gamestate);
     case FOE_1:
+        return update_foe_1(entity, gamestate);
     case BLOODY_FOE_1:
         return update_foe_1(entity, gamestate);
     case FOE_2:
@@ -79,30 +80,36 @@ int collides_foe_disk(struct entity *player, struct entity *foe)
     corner.y -= p_tf.height / 2.0;
 
     //Top left corner
+    int hit = 0;
     if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
-        return 1;
+        hit = 1;
     }
 
     corner.x += p_tf.width;
     //Top right corner
     if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
-        return 1;
+        hit = 1;
     }
 
     corner.y += p_tf.height;
     //Bottom right corner
     if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
-        return 1;
+        hit = 1;
     }
 
     corner.x -= p_tf.width;
     //Bottom left corner
     if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
-        return 1;
+        hit = 1;
     }
-    return 0;
+    if (hit)
+    {
+        if (foe->type == FOE_1)
+            foe->type = BLOODY_FOE_1;
+    }
+    return hit;
 }
