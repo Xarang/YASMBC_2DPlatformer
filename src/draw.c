@@ -2,18 +2,10 @@
 
 //should merge the two values below
 
-#define NB_TEXTURES 5
-#define NB_SPRITES 15
-
-
-#define PLAYER_SPRITE_LEN 165
-
-#define BLOCK_SIZE_F 60
-#define FOES_SIZE_F 220
-
 
 const char* ressource_files[NB_TEXTURES] =
 {
+    "resources/sprites/forestbg.png",
     "resources/sprites/forestbg.png",
     "resources/sprites/tiles.png",
     "resources/sprites/cube.png",
@@ -60,7 +52,6 @@ void init_window(struct gamestate *game)
 {
     size_t height = game->map->height * BLOCK_SIZE;
     size_t width = game->map->width * BLOCK_SIZE;
-   // size_t size = height * width;
     SDL_Window *window = SDL_CreateWindow("VGR_GAME",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             width, height, 0);
@@ -76,7 +67,18 @@ void init_window(struct gamestate *game)
 void render_background(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
-    SDL_Texture *texture = list_get_n(game->textures, BACKGROUND);
+    SDL_Texture *texture;
+    struct SDL_Rect sprite; 
+    if (game->map->world_id == 0)
+    {
+        sprite = get_sprite("forestbg1");
+        texture = list_get_n(game->textures, BACKGROUND_0);
+    }
+    else
+    {
+        sprite = get_sprite("mountainbg1");
+        texture = list_get_n(game->textures, BACKGROUND_1);
+    }
     if (!texture)
         warnx("render_background : texture not found");
     struct SDL_Rect select =
@@ -86,7 +88,6 @@ void render_background(struct gamestate *game)
         game->map->width  * BLOCK_SIZE,
         game->map->height * BLOCK_SIZE
     };
-    struct SDL_Rect sprite = get_sprite("forestbg1");
     SDL_RenderCopy(renderer, texture, &sprite, &select);
 }
 
@@ -113,17 +114,17 @@ void render_map(struct gamestate *game)
             };
             struct SDL_Rect sprite;
             if (current == BLOCK)
-            {
                 sprite = get_sprite("grass");
-            }
             else if (current == FINISH)
-            {
                 sprite = get_sprite("finish");
-            }
             else if (current == ICE)
-            {
                 sprite = get_sprite("ice");
-            }
+            else if (current == ROCK)
+                sprite = get_sprite("rock");
+            else if (current == GRASS_ROCK)
+                sprite = get_sprite("grass_rock");
+            else if (current == STONE)
+                sprite = get_sprite("stone");
             else
             {
                 continue;

@@ -3,13 +3,16 @@
 
 #include "gamestate.h"
 
+#define NB_TEXTURES 6
+
 enum texture_id
 {
-    BACKGROUND = 0,
-    MAP        = 1,
-    PLAYER_TXR = 2,
-    FOES       = 3,
-    UI         = 4
+    BACKGROUND_0 = 0,
+    BACKGROUND_1 = 1,
+    MAP          = 2,
+    PLAYER_TXR   = 3,
+    FOES         = 4,
+    UI           = 5
 };
 
 struct texture

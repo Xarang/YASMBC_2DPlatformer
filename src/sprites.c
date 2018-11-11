@@ -1,11 +1,6 @@
 #include "game.h"
 #include "draw.h"
 
-#define NB_SPRITES 15
-#define PLAYER_SPRITE_LEN 165
-#define BLOCK_SIZE_F 60
-#define FOES_SIZE_F 220
-
 struct sprite sprites[NB_SPRITES] =
 {
     { .id = MAP, .name = "grass", .rect = {
@@ -32,13 +27,38 @@ struct sprite sprites[NB_SPRITES] =
                                             BLOCK_SIZE_F * 0.7,
                                             BLOCK_SIZE_F * 0.7
                                         }},
-    { .id = BACKGROUND, .name = "forestbg1", .rect = {
-                                                         0,
-                                                         0,
-                                                         640,
-                                                         480
-                                                     }},
+    
+    { .id = MAP, .name = "rock", .rect = {
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1
+                                        }},
+    { .id = MAP, .name = "grass_rock", .rect = {
+                                            BLOCK_SIZE_F * 0,
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1
+                                        }},
+    { .id = MAP, .name = "stone", .rect = {
+                                            BLOCK_SIZE_F * 0,
+                                            BLOCK_SIZE_F * 4,
+                                            BLOCK_SIZE_F * 1,
+                                            BLOCK_SIZE_F * 1
+                                        }},
+    { .id = BACKGROUND_0, .name = "forestbg1", .rect = {
+                                                           0,
+                                                           0,
+                                                           640,
+                                                           480
+                                                       }},
 
+    { .id = BACKGROUND_1, .name = "mountainbg1", .rect = {
+                                                             0,
+                                                             0,
+                                                             640,
+                                                             480
+                                                         }},
     { .id = PLAYER_TXR, .name = "idle", .rect = {
                                                     1,
                                                     1,

@@ -7,6 +7,7 @@
 
 struct map
 {
+    int world_id;
     size_t width;
     size_t height;
     struct list *entities;

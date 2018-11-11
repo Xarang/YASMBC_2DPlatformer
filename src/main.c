@@ -1,14 +1,14 @@
 #include "game.h"
 #include "update.h"
 
-#define NB_MAPS 3
+#define NB_MAPS 5
 
 struct gamestate *gamestate_init(void)
 {
     struct gamestate *new = malloc(sizeof(struct gamestate));
     if (!new)
         return NULL;
-    new->map = load_map("resources/maps/map_one");
+    new->map = load_map("resources/maps/map_five");
     map_print(new->map);
     struct transform player_pos =
     {
@@ -35,7 +35,9 @@ Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
     {
         "resources/maps/map_one",
         "resources/maps/map_two",
-        "resources/maps/map_three"
+        "resources/maps/map_three",
+        "resources/maps/map_four", 
+        "resources/maps/map_five"
     };
     static char *musics[NB_MAPS] =
     {

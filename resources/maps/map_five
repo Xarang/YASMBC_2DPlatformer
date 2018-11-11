@@ -1,0 +1,40 @@
+1
+25
+16
+2
+2
+......RRRRRRRRRRRRRRRRR..
+##....RRSSRRRRRRRRRRR...F
+LL.....RRRRRRRRRRR.......
+RR#....RRRRRRRRRRRR......
+RR.....RRRRRRRRRRRR......
+RR.....RRRRRRRRRRR.......
+SR....RRRRRRRRR..........
+SS......RRRRR........####
+SSS....RRRR..........LLLL
+SSS........RR............
+SSS......RRRRR...........
+SSS....................$$
+SSS$................$$$SS
+SSSS$$$$$$$$$$$$$$$$SSSSS
+SSSSSSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSSSSSS
+2
+{
+    1
+    7
+    10
+    2
+    2
+    0
+    0
+}
+{
+    1
+    19
+    10
+    2
+    2
+    2
+    0
+}   

@@ -14,6 +14,12 @@ static enum block_type type_from_char(char c)
             return DEATH;
         case '$':
             return ICE;
+        case 'R':
+            return ROCK;
+        case 'S':
+            return STONE;
+        case 'L':
+            return GRASS_ROCK;
         default :
             return VOID;
     }
@@ -33,6 +39,12 @@ static char char_from_type(enum block_type type)
             return 'X';
         case ICE:
             return '$';
+        case ROCK:
+            return 'R';
+        case GRASS_ROCK:
+            return 'L';
+        case STONE:
+            return 'S';
     }
     return '.';
 }
@@ -40,68 +52,68 @@ static char char_from_type(enum block_type type)
 
 static void parse_entity(FILE *f, struct list **entities)
 {
-        char *ptr = NULL;
-        size_t a = 0;
-            int type = 0;
-            double x = 0;
-            double y = 0;
-            double h = 0;
-            double w = 0;
-            double s_x = 0;
-            double s_y = 0;
-            for (size_t i = 0; i < 8; i++)
+    char *ptr = NULL;
+    size_t a = 0;
+    int type = 0;
+    double x = 0;
+    double y = 0;
+    double h = 0;
+    double w = 0;
+    double s_x = 0;
+    double s_y = 0;
+    for (size_t i = 0; i < 8; i++)
+    {
+        if (ptr)
+        {
+            warnx("attempting to free ptr");
+            free(ptr);
+            warnx("ptr freed");
+        }
+        ptr = NULL;
+        a = 0; 
+        getline(&ptr, &a, f); 
+        double val = 0;
+        if (i < 7)
+        {
+            val = atof(ptr);
+            printf("parsed val %f\n", val);
+        }
+        if (i == 0)
+            type = val; 
+        else if (i == 1)
+            x = val;
+        else if (i == 2)
+            y = val;
+        else if (i == 3)
+            w = val;
+        else if (i == 4)
+            h = val;
+        else if (i == 5)
+            s_x = val;
+        else if (i == 6)
+            s_y = val;
+        else
+        {
+            struct vector2 pos = { x, y };
+            struct vector2 spd = { s_x, s_y };
+            struct transform transform = { h, w, pos, spd};
+            struct entity *entity = create_entity(type, transform);
+            if (!(*entities))
             {
-                if (ptr)
-                {
-                    warnx("attempting to free ptr");
-                    free(ptr);
-                    warnx("ptr freed");
-                }
-                ptr = NULL;
-                a = 0; 
-                getline(&ptr, &a, f); 
-                double val = 0;
-                if (i < 7)
-                {
-                    val = atof(ptr);
-                    printf("parsed val %f\n", val);
-                }
-                if (i == 0)
-                    type = val; 
-                else if (i == 1)
-                    x = val;
-                else if (i == 2)
-                    y = val;
-                else if (i == 3)
-                    w = val;
-                else if (i == 4)
-                    h = val;
-                else if (i == 5)
-                    s_x = val;
-                else if (i == 6)
-                    s_y = val;
-                else
-                {
-                    struct vector2 pos = { x, y };
-                    struct vector2 spd = { s_x, s_y };
-                    struct transform transform = { h, w, pos, spd};
-                    struct entity *entity = create_entity(type, transform);
-                    if (!(*entities))
-                    {
-                        *entities = list_init(entity);
-                        printf("crated entity list\n");
-                    }
-                    else
-                    {
-                        list_add(*entities, entity);
-                        printf("added entity to list\n");
-                    }
-                    
-                    free(ptr);
-                    ptr = NULL;
-                    warnx("entity created");
-                }
+                *entities = list_init(entity);
+                printf("crated entity list\n");
             }
+            else
+            {
+                list_add(*entities, entity);
+                printf("added entity to list\n");
+            }
+
+            free(ptr);
+            ptr = NULL;
+            warnx("entity created");
+        }
+    }
 }
 
 static void parse_entities(FILE *f, struct map *map, int n)
@@ -168,15 +180,17 @@ struct map *load_map(const char *filename)
             size_t try = getline(ptr, &n, f);
             *(*ptr + try - 1) = '\0';
             printf("parsed line : %s\n", *ptr);
-            if (count == h + 4)
+            if (count == h + 5)
                 break;
             if (count == 0)
-                new->width = atoi(*ptr);
+                new->world_id = atoi(*ptr);
             else if (count == 1)
-                new->height = atoi(*ptr);
+                new->width = atoi(*ptr);
             else if (count == 2)
+                new->height = atoi(*ptr);
+            else if (count == 3)
                 new->start.x = atoi(*ptr);
-            else if(count == 3)
+            else if(count == 4)
                 new->start.y = atoi(*ptr);
             else
             {
@@ -194,7 +208,7 @@ struct map *load_map(const char *filename)
                 }
                 for (size_t i = 0; i < w; i++)
                 {
-                    *(blocks + (count - 4) * w + i) = type_from_char(*(*ptr + i));
+                    *(blocks + (count - 5)*w + i)=type_from_char(*(*ptr + i));
                 }
             }
             if (*ptr)
