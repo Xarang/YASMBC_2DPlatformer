@@ -5,6 +5,7 @@
 #include "input.h"
 #include "gamestate.h"
 #include "audio.h"
+#include "list.h"
 
 #define SIGN(X) (((X) > 0) - ((X) < 0))
 
@@ -132,6 +133,23 @@ static struct transform get_new_transform(struct entity *player,
     return tf;
 }
 
+static int collides_foes(struct entity *player, struct gamestate *gamestate)
+{
+    struct list *foes = gamestate->map->entities;
+    struct entity *foe;
+    size_t nb_entities = gamestate->map->nb_entities;
+    for (size_t i = 0; i < nb_entities; i++)
+    {
+        foe = list_get_n(foes, i);
+        if (collides(player->transform, foe->transform))
+        {
+            printf("Foe pos: (%f, %f)\nFoe dim: (%f, %f)\n", foe->transform.pos.x, foe->transform.pos.y, foe->transform.width, foe->transform.height);
+            return 1;
+        }
+    }
+    return 0;
+}
+
 enum entity_status update_player(struct entity *player,
                                  struct gamestate *gamestate)
 {
@@ -192,6 +210,12 @@ enum entity_status update_player(struct entity *player,
         player->is_walled = 0;
     }
     player->transform = new_tf;
+
+    if (collides_foes(player, gamestate))
+    {
+        kill_player(player, gamestate);
+        return DIED;
+    }
     return ALIVE;
 }
 
