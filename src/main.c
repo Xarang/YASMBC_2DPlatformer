@@ -42,21 +42,26 @@ static int switch_map(struct gamestate *game, int ind, Mix_Music *music)
         "resources/audio/stage2.mp3",
         "resources/audio/stage2.mp3"
     };
-    if (ind + 1 <= NB_MAPS)
+    if (ind + 1 >= NB_MAPS)
         return -1;
     ind++;
     Mix_FreeMusic(music);
     Mix_Music *fanfare = play_music("resources/audio/win.mp3", 1);
     //destroy_map(game->map);
     game->map = load_map(maps[ind]);
+    game->player->init_transform.pos.x = game->map->start.x;
+    game->player->init_transform.pos.y = game->map->start.y;
     reset_entity(game->player);
 
-    SDL_Event keyevent;
-    while (SDL_WaitEvent(&keyevent))
+    while (1)
     {
-        if (keyevent.type == SDL_KEYDOWN || keyevent.type == SDL_KEYUP)
+        SDL_PumpEvents();
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_RETURN])
             break;
     }
+    SDL_SetWindowSize(game->window, game->map->width * BLOCK_SIZE,
+            game->map->height * BLOCK_SIZE);
 
     Mix_FreeMusic(fanfare);
     music = play_music(musics[ind], -1);
@@ -96,13 +101,12 @@ int main(void)
             if (game->inputs[i])
                 printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
         }
-        int win = 0;
-        /*int win = */update(game, inputs);
+        enum game_status win = update(game, inputs);
 
         SDL_RenderClear(game->renderer);
         render_game(game);
 
-        if (win)
+        if (win == WIN)
         {
             map = switch_map(game, map, music);
             if (map < 0)
