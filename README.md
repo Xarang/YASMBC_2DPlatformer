@@ -2,16 +2,9 @@
 
 authors : @vincent.te,  @jerome.tchan, @victor.coatalem
 
-This is a C Video Game Project done in 38 hours straigth using SDL2 as graphical library.
-
-The game itself is a 2D platformer emulating the game Super Meat Boy by Meat Team. The controls and features are explicited in this README.
-
-As of today the game contains some POSIX functions and is as a result not Windows-compatible. Sorry about that.
-
-
 ## Introduction
 
-**Yet Another Super Meat Boy Clone** (shortened as **YASMBC** for the remainder of this file) is a game made in 38 hours for EPITA's *Rush C* project. As the name indicates, it is a platforming game inspired by *Super Meat Boy* by Team Meat and as such, features similar gameplay mechanics (such as wall jumps for example).
+**Yet Another Super Meat Boy Clone** (shortened as **YASMBC** for the remainder of this file) is a game made in 38 hours for EPITA's *Rush C* project. As the name indicates, it is a platforming game inspired by *Super Meat Boy* by Team Meat and as such, features similar gameplay mechanics (such as wall jumps for example). As of today some of the function are POSIX and therefore not supported by Windows. Sorry about that.
 
 ## Build
 
