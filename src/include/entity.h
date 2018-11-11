@@ -6,6 +6,14 @@
 
 #define NB_ENTITY_TYPE 3
 
+enum entity_status
+{
+    ALIVE,
+    DIED,
+    PLAYER_FINISH,
+    ENTITY_ERROR
+};
+
 enum entity_type
 {
     PLAYER = 0,
@@ -36,7 +44,8 @@ struct entity
 struct entity *create_entity(enum entity_type type, struct transform transform);
 void reset_entity(struct entity *entity);
 void destroy_entity(struct entity *entity);
-void update_entity(struct entity *entity, struct gamestate *gamestate);
+enum entity_status update_entity(struct entity *entity,
+                                 struct gamestate *gamestate);
 int collides(struct transform tf1, struct transform tf2);
 
 #endif /* ! ENTITY_H */

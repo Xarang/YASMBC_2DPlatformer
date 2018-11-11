@@ -3,7 +3,8 @@
 
 #include "entity.h"
 
-void update_player(struct entity *player, struct gamestate *gamestate);
+enum entity_status update_player(struct entity *player,
+                                struct gamestate *gamestate);
 void kill_player(struct entity *player, struct gamestate *gamestate);
 
 #endif /* ! PLAYER_H */

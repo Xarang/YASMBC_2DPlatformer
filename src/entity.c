@@ -5,7 +5,8 @@
 #include "foe_1.h"
 #include "foe_2.h"
 
-typedef void (*update_f)(struct entity *entity, struct gamestate *gamestate);
+typedef enum entity_status (*update_f)(struct entity *entity,
+                                       struct gamestate *gamestate);
 
 struct entity *create_entity(enum entity_type type, struct transform transform)
 {
@@ -28,7 +29,7 @@ void destroy_entity(struct entity *entity)
     free(entity);
 }
 
-void update_entity(struct entity *entity, struct gamestate *gamestate)
+enum entity_status update_entity(struct entity *entity, struct gamestate *gamestate)
 {
     update_f f_list[NB_ENTITY_TYPE] =
     {
@@ -36,7 +37,7 @@ void update_entity(struct entity *entity, struct gamestate *gamestate)
         update_foe_1,
         update_foe_2
     };
-    f_list[entity->type](entity, gamestate);
+    return f_list[entity->type](entity, gamestate);
 }
 
 void reset_entity(struct entity *entity)

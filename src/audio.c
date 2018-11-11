@@ -41,13 +41,13 @@ void free_sfx(Mix_Chunk **sfxs)
         Mix_FreeChunk(sfxs[i]);
 }
 
-Mix_Music *play_music(const char *file)
+Mix_Music *play_music(const char *file, int loops)
 {
     Mix_Music *music = Mix_LoadMUS(file);
     if (!music)
         fprintf(stderr, "Error while loading music: %s\n", Mix_GetError());
     else
-        Mix_PlayMusic(music, -1);
+        Mix_PlayMusic(music, loops);
     return music;
 }
 
