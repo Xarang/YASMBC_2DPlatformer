@@ -142,8 +142,10 @@ static int collides_foes(struct entity *player, struct gamestate *gamestate)
     for (size_t i = 0; i < nb_entities; i++)
     {
         foe = list_get_n(foes, i);
-        if (foe->type == FOE_1 && collides_foe_1(player, foe))
+        if ((foe->type == FOE_1 || foe->type == BLOODY_FOE_1) &&
+            collides_foe_1(player, foe))
         {
+            foe->type = BLOODY_FOE_1;
             return 1;
         }
     }
