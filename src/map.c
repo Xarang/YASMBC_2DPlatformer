@@ -37,33 +37,11 @@ char char_from_type(enum block_type type)
     return '.';
 }
 
-void parse_entities(FILE *f, struct map *map, int n)
+
+void parse_entity(FILE *f, struct list **entities)
 {
-   // char **ptr = malloc(sizeof(char*));
-   // if (!ptr)
-   //     return;
-    struct list *entities = NULL;
-    char *ptr = NULL;
-    map->nb_entities = n;
-    int parsing_entity = 0;
-    size_t a = 0;
-    while (n > 0)
-    {
-        warnx("entered while");
-        warnx("about to call getline. a: %zu. *ptr is null : %d", a, ptr == NULL);
-        int try = getline(&ptr, &a, f);
-        //if (!(*ptr))
-        //    warnx("ptr null");    
-        warnx("parsed line : %s", ptr);
-        *(ptr + try - 1) = '\0';
-        if (*ptr == '{')
-        {
-            parsing_entity = 1;
-            ptr = NULL;
-            a = 0;
-        }
-        if (parsing_entity)
-        {
+        char *ptr = NULL;
+        size_t a = 0;
             int type = 0;
             double x = 0;
             double y = 0;
@@ -79,7 +57,7 @@ void parse_entities(FILE *f, struct map *map, int n)
                 }
                 ptr = NULL;
                 a = 0; 
-                try = getline(&ptr, &a, f); 
+                getline(&ptr, &a, f); 
                 double val = 0;
                 if (i < 5)
                 {
@@ -102,26 +80,55 @@ void parse_entities(FILE *f, struct map *map, int n)
                     struct vector2 spd = { FOE_1_X_VEL, FOE_1_Y_VEL };
                     struct transform transform = { h, w, pos, spd};
                     struct entity *entity = create_entity(type, transform);
-                    if (!entities)
+                    if (!(*entities))
                     {
-                        entities = list_init(entity);
+                        *entities = list_init(entity);
                         printf("crated entity list\n");
                     }
                     else
                     {
-                        list_add(entities, entity);
+                        list_add(*entities, entity);
                         printf("added entity to list\n");
                     }
                     
                     free(ptr);
                     ptr = NULL;
-                    a = 0;
-                    parsing_entity = 0;
-                    n--;
                     warnx("entity created");
                 }
             }
+}
+
+
+
+void parse_entities(FILE *f, struct map *map, int n)
+{
+   // char **ptr = malloc(sizeof(char*));
+   // if (!ptr)
+   //     return; 
+    char *ptr = NULL;
+    struct list *entities = NULL;
+    map->nb_entities = n;
+    int parsing_entity = 0;
+    size_t a = 0;
+    while (n > 0)
+    {
+        int try = getline(&ptr, &a, f);
+        //if (!(*ptr))
+        //    warnx("ptr null");    
+        *(ptr + try - 1) = '\0';
+        if (*ptr == '{')
+        {
+            parsing_entity = 1;
+            ptr = NULL;
+            a = 0;
         }
+        if (parsing_entity)
+        {
+            parse_entity(f, &entities);
+        }
+        a = 0;
+        parsing_entity = 0;
+        n--;
     }
     map->entities = entities;
     warnx("exiting entity parsing");
