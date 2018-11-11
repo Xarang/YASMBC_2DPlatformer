@@ -75,8 +75,6 @@ Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
     return tmp;
 }
 
-
-
 int main(void)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
@@ -85,7 +83,6 @@ int main(void)
     struct gamestate *game = gamestate_init();
 
     init_audio();
-  //  Mix_Music *music = play_music("resources/audio/stage1.mp3", -1);
     game->music = play_music("resources/audio/stage1.mp3", -1);
     render_game(game);
 
@@ -101,26 +98,21 @@ int main(void)
     init_sfx(game, sfxs);
 
     int map = 0;
-    int count = 1;
-    while (count > 0)
+    while (map < NB_MAPS)
     {
         get_input(inputs, game);
         if (game->inputs[EXIT])
             break;
-        enum game_status win = update(game, inputs);
+        enum game_status status = update(game, inputs);
 
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
 
-        if (win == WIN)
+        if (status == WIN)
         {
             game->music = switch_map(game, &map, game->music);
-            if (map >= NB_MAPS)
-                break;
         }
-    //count--;
-//        SDL_Delay(16);
     }
     exit_game(game);
     return 0;

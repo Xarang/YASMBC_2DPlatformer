@@ -5,8 +5,8 @@
 
 struct vector2
 {
-  double x;
-  double y;
+    double x;
+    double y;
 };
 
 struct vector2 vector2_init(double x, double y);

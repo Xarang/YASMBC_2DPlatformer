@@ -5,9 +5,6 @@
 #include "foe_1.h"
 #include "foe_2.h"
 
-typedef enum entity_status (*update_f)(struct entity *entity,
-                                       struct gamestate *gamestate);
-
 struct entity *create_entity(enum entity_type type, struct transform transform)
 {
     struct entity *res = malloc(sizeof(struct entity));
@@ -23,23 +20,6 @@ struct entity *create_entity(enum entity_type type, struct transform transform)
     res->is_walled = 0;
     res->state = 0;
     return res;
-}
-
-void print_transform(struct transform transform)
-{
-    printf("height : %f\n", transform.height);
-    printf("width : %f\n", transform.width);
-    printf("pos : %f/%f\n", transform.pos.x, transform.pos.y);
-    printf("vel : %f/%f\n", transform.vel.x, transform.vel.y);
-
-}
-
-void print_entity(struct entity *entity)
-{
-    printf("entity of type %d\n", entity->type);
-    printf("transform:\n");
-    print_transform(entity->transform);
-    printf("state : %d\n", entity->state);
 }
 
 void destroy_entity(struct entity *entity)
