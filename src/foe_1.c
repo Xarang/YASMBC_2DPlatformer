@@ -18,6 +18,7 @@ enum entity_status update_foe_1(struct entity *foe, struct gamestate *gamestate)
         new_tf = old_tf;
         new_tf.vel = vector2_scale(new_tf.vel, -1);
     }
+    foe->transform = new_tf;
     return ENTITY_ERROR;
 }
 
