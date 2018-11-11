@@ -6,6 +6,7 @@
 #include "gamestate.h"
 #include "audio.h"
 #include "list.h"
+#include "foe_1.h"
 
 #define SIGN(X) (((X) > 0) - ((X) < 0))
 
@@ -141,9 +142,8 @@ static int collides_foes(struct entity *player, struct gamestate *gamestate)
     for (size_t i = 0; i < nb_entities; i++)
     {
         foe = list_get_n(foes, i);
-        if (collides(player->transform, foe->transform))
+        if (foe->type == FOE_1 && collides_foe_1(player, foe))
         {
-            printf("Foe pos: (%f, %f)\nFoe dim: (%f, %f)\n", foe->transform.pos.x, foe->transform.pos.y, foe->transform.width, foe->transform.height);
             return 1;
         }
     }
