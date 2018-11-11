@@ -1,8 +1,8 @@
 1
 25
 16
-2
-2
+0
+0
 ......RRRRRRRRRRRRRRRRR..
 ##....RRSSRRRRRRRRRRR...F
 LL.....RRRRRRRRRRR.......
@@ -13,13 +13,13 @@ SR....RRRRRRRRR..........
 SS......RRRRR........####
 SSS....RRRR..........LLLL
 SSS........RR............
-SSS......RRRRR...........
+SSS.....RRRRRR...........
 SSS....................$$
 SSS$................$$$SS
 SSSS$$$$$$$$$$$$$$$$SSSSS
 SSSSSSSSSSSSSSSSSSSSSSSSS
 SSSSSSSSSSSSSSSSSSSSSSSSS
-2
+3
 {
     1
     7
@@ -35,6 +35,15 @@ SSSSSSSSSSSSSSSSSSSSSSSSS
     10
     2
     2
-    2
+    16
     0
-}   
+}
+{
+    1
+    12
+    13
+    2.5
+    2.5
+    0
+    0
+}
