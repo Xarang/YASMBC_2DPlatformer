@@ -122,7 +122,8 @@ static struct transform get_new_transform(struct entity *player,
     return tf;
 }
 
-void update_player(struct entity *player, struct gamestate *gamestate)
+enum entity_status update_player(struct entity *player,
+                                 struct gamestate *gamestate)
 {
     struct transform new_tf = get_new_transform(player, gamestate);
     struct transform old_tf = player->transform;
@@ -144,7 +145,11 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     else if (tile == DEATH)
     {
         kill_player(player, gamestate);
-        return;
+        return DIED;
+    }
+    else if (tile == FINISH)
+    {
+        return PLAYER_FINISH;
     }
     else
     {
@@ -166,13 +171,18 @@ void update_player(struct entity *player, struct gamestate *gamestate)
     else if (tile == DEATH)
     {
         kill_player(player, gamestate);
-        return;
+        return DIED;
+    }
+    else if (tile == FINISH)
+    {
+        return PLAYER_FINISH;
     }
     else
     {
         player->is_walled = 0;
     }
     player->transform = new_tf;
+    return ALIVE;
 }
 
 void kill_player(struct entity *player, struct gamestate *gamestate)

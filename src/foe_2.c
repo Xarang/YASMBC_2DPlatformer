@@ -1,8 +1,8 @@
 #include "foe_2.h"
 
-void update_foe_2(struct entity *foe, struct gamestate *gamestate)
+enum entity_status update_foe_2(struct entity *foe, struct gamestate *gamestate)
 {
     foe = foe;
     gamestate = gamestate;
-    return;
+    return ENTITY_ERROR;
 }
