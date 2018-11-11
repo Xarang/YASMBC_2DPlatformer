@@ -49,13 +49,22 @@ void destroy_entity(struct entity *entity)
 
 enum entity_status update_entity(struct entity *entity, struct gamestate *gamestate)
 {
-    update_f f_list[NB_ENTITY_TYPE] =
+    if (entity->type == PLAYER)
     {
-        update_player,
-        update_foe_1,
-        update_foe_2
-    };
-    return f_list[entity->type](entity, gamestate);
+        return update_player(entity, gamestate);
+    }
+    else if (entity->type == FOE_1 || entity->type == BLOODY_FOE_1)
+    {
+        return update_foe_1(entity, gamestate);
+    }
+    else if (entity->type == FOE_2)
+    {
+        return ENTITY_ERROR;
+    }
+    else
+    {
+        return ENTITY_ERROR;
+    }
 }
 
 void reset_entity(struct entity *entity)
