@@ -3,26 +3,17 @@
 void exit_game(struct gamestate *game)
 {
     free_sfx(game->sfxs);
-    printf("sfxs freed\n");
     Mix_FreeMusic(game->music);
-    printf("Music freed\n");
     close_audio();
-    printf("audio closed\n");
     free_textures(game->textures);
-    printf("textures freed\n");
     SDL_DestroyWindow(game->window);
-    printf("window destroyed\n");
     if (game->map)
     {
         destroy_map(game->map);
-        printf("map destroyed\n");
     }
     destroy_entity(game->player);
-    printf("player destroyed\n");
     free(game);
-    printf("gamestate structure freed\n");
     SDL_Quit();
-    printf("SDL stopped\n");
 }
 
 

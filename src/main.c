@@ -107,11 +107,6 @@ int main(void)
         get_input(inputs, game);
         if (game->inputs[EXIT])
             break;
-        for (size_t i = 0; i < NB_ACTION; i++)
-        {
-            if (game->inputs[i])
-                printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
-        }
         enum game_status win = update(game, inputs);
 
         SDL_RenderClear(game->renderer);

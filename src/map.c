@@ -65,21 +65,18 @@ static void parse_entity(FILE *f, struct list **entities)
     {
         if (ptr)
         {
-            warnx("attempting to free ptr");
             free(ptr);
-            warnx("ptr freed");
         }
         ptr = NULL;
-        a = 0; 
-        getline(&ptr, &a, f); 
+        a = 0;
+        getline(&ptr, &a, f);
         double val = 0;
         if (i < 7)
         {
             val = atof(ptr);
-            printf("parsed val %f\n", val);
         }
         if (i == 0)
-            type = val; 
+            type = val;
         else if (i == 1)
             x = val;
         else if (i == 2)
@@ -101,26 +98,19 @@ static void parse_entity(FILE *f, struct list **entities)
             if (!(*entities))
             {
                 *entities = list_init(entity);
-                printf("crated entity list\n");
             }
             else
             {
                 list_add(*entities, entity);
-                printf("added entity to list\n");
             }
-
             free(ptr);
             ptr = NULL;
-            warnx("entity created");
         }
     }
 }
 
 static void parse_entities(FILE *f, struct map *map, int n)
 {
-   // char **ptr = malloc(sizeof(char*));
-   // if (!ptr)
-   //     return; 
     char *ptr = NULL;
     struct list *entities = NULL;
     map->nb_entities = n;
@@ -129,8 +119,6 @@ static void parse_entities(FILE *f, struct map *map, int n)
     while (n > 0)
     {
         int try = getline(&ptr, &a, f);
-        //if (!(*ptr))
-        //    warnx("ptr null");    
         *(ptr + try - 1) = '\0';
         if (*ptr == '{')
         {
@@ -151,90 +139,87 @@ static void parse_entities(FILE *f, struct map *map, int n)
     warnx("exiting entity parsing");
 }
 
+enum block_type *parse_map(FILE *f, struct map *new, char **ptr)
+{
+    *ptr = NULL;
+    size_t n = 0;
+    enum block_type *blocks = NULL;
+    size_t h = 10;
+    size_t w = 10;
+    size_t count = 0;
+    while (1)
+    {
+        size_t try = getline(ptr, &n, f);
+        *(*ptr + try - 1) = '\0';
+        if (count == h + 5)
+            break;
+        if (count == 0)
+            new->world_id = atoi(*ptr);
+        else if (count == 1)
+            new->width = atoi(*ptr);
+        else if (count == 2)
+            new->height = atoi(*ptr);
+        else if (count == 3)
+            new->start.x = atoi(*ptr);
+        else if(count == 4)
+            new->start.y = atoi(*ptr);
+        else
+        {
+            if (!blocks)
+            {
+                h = new->height;
+                w = new->width;
+                blocks = malloc(sizeof(enum block_type) * h * w);
+                if (!blocks)
+                {
+                    free(new);
+                    fclose(f);
+                    return NULL;
+                }
+            }
+            for (size_t i = 0; i < w; i++)
+                *(blocks + (count - 5)*w + i)=type_from_char(*(*ptr + i));
+        }
+        if (*ptr)
+        {
+            free(*ptr);
+            *ptr = NULL;
+            n = 0;
+        }
+        count++;
+    }
+    return blocks;
+}
+
 struct map *load_map(const char *filename)
 {
-    printf("entered load_map\n");
     struct map *new = malloc(sizeof(struct map));
     if (!new)
         return NULL;
-    new->nb_entities = 1; //change this to 0
+    new->nb_entities = 0;
     FILE *f = fopen(filename, "r");
     if (!f)
     {
-        printf("could not open file\n");
         free(new);
         return NULL;
     }
     else
     {
-        printf("opened file\n");
         char **ptr = malloc(sizeof(char*));
-        *ptr = NULL;
-        size_t n = 0;
-        enum block_type *blocks = NULL;
-        size_t h = 10;
-        size_t w = 10;
-        size_t count = 0;
-        while (1)
-        { 
-            size_t try = getline(ptr, &n, f);
-            *(*ptr + try - 1) = '\0';
-            printf("parsed line : %s\n", *ptr);
-            if (count == h + 5)
-                break;
-            if (count == 0)
-                new->world_id = atoi(*ptr);
-            else if (count == 1)
-                new->width = atoi(*ptr);
-            else if (count == 2)
-                new->height = atoi(*ptr);
-            else if (count == 3)
-                new->start.x = atoi(*ptr);
-            else if(count == 4)
-                new->start.y = atoi(*ptr);
-            else
-            {
-                if (!blocks)
-                {
-                    h = new->height;
-                    w = new->width;
-                    blocks = malloc(sizeof(enum block_type) * h * w);
-                    if (!blocks)
-                    {
-                        free(new);
-                        fclose(f);
-                        return NULL;
-                    }
-                }
-                for (size_t i = 0; i < w; i++)
-                {
-                    *(blocks + (count - 5)*w + i)=type_from_char(*(*ptr + i));
-                }
-            }
-            if (*ptr)
-            {
-                free(*ptr);
-                *ptr = NULL;
-                n = 0;
-            }
-            count++;
-        }
-        printf("atoi ptr : %d\n", atoi(*ptr));
+        enum block_type *blocks = parse_map(f, new, ptr);
         if (atoi(*ptr) != 0)
         {
-            printf("detected entities : %d\n", atoi(*ptr));
             parse_entities(f, new, atoi(*ptr));
             free(*ptr);
             *ptr = NULL;
         }
-        new->blocks = blocks; 
+        new->blocks = blocks;
         if (ptr)
         {
             free(ptr);
         }
         fclose(f);
     }
-    warnx("exiting parsing");
     return new;
 }
 

@@ -15,7 +15,6 @@ const char* ressource_files[NB_TEXTURES] =
 
 void load_textures(struct gamestate *game)
 {
-    warnx("entered load_textures");
     game->texture_count = 0;
     struct SDL_Renderer *renderer = game->renderer;
     //struct SDL_Window *window = game->window;
@@ -24,14 +23,14 @@ void load_textures(struct gamestate *game)
     {
         SDL_Surface *blocks = IMG_Load(ressource_files[i]);
         if (!blocks)
-            printf("could not load texture\n");
-        SDL_Texture *blocks_texture=SDL_CreateTextureFromSurface(renderer,blocks);
-        if (!blocks_texture)
-            printf("could not turn image into texture\n");
+            warnx("could not open image");
+        SDL_Texture *blocks_txr=SDL_CreateTextureFromSurface(renderer,blocks);
+        if (!blocks_txr)
+            warnx("could not load texture");
         if (i == 0)
-            textures = list_init(blocks_texture);
+            textures = list_init(blocks_txr);
         else
-            list_add(textures, blocks_texture);
+            list_add(textures, blocks_txr);
     }
 
 
@@ -96,10 +95,6 @@ void render_map(struct gamestate *game)
     SDL_Renderer *renderer = game->renderer;
     SDL_Texture *texture = list_get_n(game->textures, MAP);
     struct map *map = game->map;
-
-   // struct SDL_Rect *rect[map->width][map->height];
-    // size_t size = game->map->width * game->map->height;
-    map_print(map);
     for (size_t i = 0; i < map->width; i++)
     {
         for (size_t j = 0; j < map->height; j++)
@@ -147,9 +142,6 @@ void render_player(struct gamestate *game)
         BLOCK_SIZE * player_tf.width,
         BLOCK_SIZE * player_tf.height
     };
-    warnx("player position : %f/%f\n",player_tf.pos.x, player_tf.pos.y);
-    warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
-
     struct SDL_Rect sprite = get_sprite("full");
     SDL_RenderCopy(renderer, texture, &sprite, &player_position);
 }
@@ -161,32 +153,20 @@ void rendering_setup(struct gamestate *game)
     SDL_SetRenderTarget(renderer, NULL);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
-
 }
 
 void render_entities(struct gamestate *game)
 {
-    warnx("entered entities rendering");
     SDL_Renderer *renderer = game->renderer;
-    printf("will try to get texture\n");
     SDL_Texture *texture = list_get_n(game->textures, FOES);
-    warnx("got texture");
     struct map *map = game->map;
-    warnx("loaded map");
     struct list *entities = map->entities;
-    warnx("loaded entities");
-    if (!entities)
-        warnx("entitites null");
-
     for (size_t i = 0; i < map->nb_entities; i++)
     {
         struct entity *current = entities->data;
         print_entity(current);
-        if (!current)
-            warnx("entity null");
         struct SDL_Rect sprite = get_entity_sprite(current);
         struct transform transform = current->transform;
-        printf("transform get\n");
         struct SDL_Rect pos =
         {
             (transform.pos.x - transform.width / 2) * BLOCK_SIZE,
@@ -194,12 +174,9 @@ void render_entities(struct gamestate *game)
             transform.width * BLOCK_SIZE,
             transform.height* BLOCK_SIZE
         };
-        printf("sdl rec created : pos: %d/%d scale : %d/%d\n",
-                                pos.x, pos.y, pos.w, pos.h);
         SDL_RenderCopy(renderer, texture, &sprite, &pos);
         entities = entities->next;
     }
-    warnx("exit render entities..");
 }
 
 void render_game(struct gamestate *game)
