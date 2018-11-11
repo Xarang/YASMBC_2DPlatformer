@@ -35,6 +35,8 @@ Run `./main` to launch the game.
 - `R`: Restart the current level
 - `Escape`: Quit the game
 
+After finishing a level (when the fanfare plays), press `Enter` to go to the next one.
+
 ### Map format
 
 Map files follow the specification described below:
@@ -50,7 +52,26 @@ Map files follow the specification described below:
 - Map description is the section that describes the blocks in the map. This section should have `height` lines and each line should have `width` columns. Each character corresponds to one block in the map and the following characters can be used:
     - `.`: void (air)
     - `#`: block
-    - `$`: non-"wallable" block (you cannot perform a wall jump on them)
+    - `$`: ice block (you cannot perform a wall jump on them)
+    - `S`: stone
+    - `R`: rock
+    - `L`: mossy rock
+    - `F`: finish block
+  
+  Please note that blocks, stones, rocks and mossy rocks have the exact same behaviour.
+- Enemy description should follow the following format:
+  ```
+  {
+      [Enemy ID] (always 1)
+      [Position X]
+      [Position Y]
+      [Size W]
+      [Size H]
+      [Speed X]
+      [Speed Y]
+  }
+  ``` 
+  The indentation should be 4 spaces. There must be as many enemy descriptions as the number of enemies declared.
 ## Sources
 
 - Musics:
@@ -65,6 +86,22 @@ Map files follow the specification described below:
 
 - Sprites:
     - Blocks and background from Super Meat Boy
-    - Player sprite from Cookie Run
 
 ## Features
+
+- Character movements
+- Jumps (the longer you hold the jump button, the higher you jump)
+- Wall jumps
+- Quick restart (by pressing `R`)
+- Quick exit (by pressing `Esc`)
+- Pause (~~and pause buffer is a feature~~)
+- Music and SFXs
+- Enemies (moving and static ones)
+- Falling into the void detection
+- Win detection (it plays a fanfare when winning)
+- Sprites
+- Custom map format
+- Different types of blocks with different behaviours (You cannot wall jump on ice blocks and they are also more slippery)
+- Fancy physics overall
+- Map switching after winning
+- Saw animations (and red splatters on them when dying)
