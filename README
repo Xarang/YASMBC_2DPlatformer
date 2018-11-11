@@ -4,7 +4,7 @@
 
 ## Introduction
 
-**Yet Another Super Meat Boy Clone** (shortened as **YASMBC** for the remainder of this file) is a game made in 38 hours for EPITA's *Rush C* project. As the name indicates, it is a platforming game inspired by *Super Meat Boy* by Team Meat and as such, features similar gameplay mechanics.
+**Yet Another Super Meat Boy Clone** (shortened as **YASMBC** for the remainder of this file) is a game made in 38 hours for EPITA's *Rush C* project. As the name indicates, it is a platforming game inspired by *Super Meat Boy* by Team Meat and as such, features similar gameplay mechanics (such as wall jumps for example).
 
 ## Build
 
@@ -35,6 +35,22 @@ Run `./main` to launch the game.
 - `R`: Restart the current level
 - `Escape`: Quit the game
 
+### Map format
+
+Map files follow the specification described below:
+```
+[Width of the map]
+[Height of the map]
+[Starting point X]
+[Starting point Y]
+[Map description (see below)]
+[Number of enemies]
+[Enemies description (see below)]
+```
+- Map description is the section that describes the blocks in the map. This section should have `height` lines and each line should have `width` columns. Each character corresponds to one block in the map and the following characters can be used:
+    - `.`: void (air)
+    - `#`: block
+    - `$`: non-"wallable" block (you cannot perform a wall jump on them)
 ## Sources
 
 - Musics:
