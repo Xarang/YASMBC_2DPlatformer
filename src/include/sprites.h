@@ -3,7 +3,7 @@
 
 #include "game.h"
 
-#define NB_SPRITES 15
+#define NB_SPRITES 18
 #define PLAYER_SPRITE_LEN 165
 #define BLOCK_SIZE_F 60
 #define FOES_SIZE_F 220

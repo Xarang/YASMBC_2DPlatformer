@@ -1,7 +1,7 @@
 #include "game.h"
 #include "update.h"
 
-#define NB_MAPS 3
+#define NB_MAPS 6
 
 struct gamestate *gamestate_init(void)
 {
@@ -35,11 +35,17 @@ Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
     {
         "resources/maps/map_one",
         "resources/maps/map_two",
-        "resources/maps/map_three"
+        "resources/maps/map_three",
+        "resources/maps/map_four",
+        "resources/maps/map_five",
+        "resources/maps/map_six"
     };
     static char *musics[NB_MAPS] =
     {
         "resources/audio/stage1.mp3",
+        "resources/audio/stage1.mp3",
+        "resources/audio/stage1.mp3",
+        "resources/audio/stage2.mp3",
         "resources/audio/stage2.mp3",
         "resources/audio/stage2.mp3"
     };

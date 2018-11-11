@@ -2,12 +2,14 @@
 
 int is_solid(enum block_type t)
 {
-    return t == BLOCK || t == ICE;
+    return t == BLOCK || t == ICE || t == ROCK || t == GRASS_ROCK\
+        || t == STONE;
 }
 
 int is_wall_jumpable(enum block_type t)
 {
-    return t == BLOCK;
+
+    return t == BLOCK || t == ROCK || t == GRASS_ROCK || t == STONE;
 }
 
 int is_deadly(enum block_type t)
