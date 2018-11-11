@@ -1,5 +1,5 @@
 #include <SDL.h>
-//#include "time_utils.h"
+#include "time_utils.h"
 
 double delta_time(uint64_t *last_update_time)
 {

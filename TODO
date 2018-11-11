@@ -1,7 +1,25 @@
-* FIND GAME CONCEPT
+# TODO
 
-* DETAILED EXPLICITATION OF IMPLEMENTATION OF CHOSEN GAME CONCEPT
+- [x] Find game concept
 
-    [ INSERT GAME CREATION HERE ]
-
-* PROFIT
+- [x] Basic display
+- [x] Basic character movement
+- [x] Enemies
+- [x] A way to win
+- [x] Two ways to lose at least
+- [x] Jumps
+- [x] Wall jumps
+- [x] Music
+- [x] Sound effects
+- [x] Custom map format + parsing
+- [x] Collisions
+- [x] Sprites display
+- [~] Animations
+    * [x] Enemy animation
+    * [ ] Player animation
+- [ ] Multiplayer
+- [ ] Main menu + level selection
+- [ ] Display text when paused or winning
+- [ ] Death counter
+- [ ] Timer
+- [ ] Not instantly quitting the game when completing all of the levels

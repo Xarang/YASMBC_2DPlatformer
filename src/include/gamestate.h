@@ -12,7 +12,6 @@ struct gamestate
     struct entity *player;
     uint64_t last_update_time;
     int *inputs;
-    //SDL SurfaceS
     struct SDL_Window *window;
     struct SDL_Renderer *renderer;
     struct list *textures;
