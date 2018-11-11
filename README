@@ -37,6 +37,10 @@ Run `./main` to launch the game.
 
 After finishing a level (when the fanfare plays), press `Enter` to go to the next one.
 
+### How to win (or die)
+
+The goal of the game is to reach the finish block (represented by a metal block) without touching any of the enemies (saws) or falling into the void. Each death will make you respawn to the starting point.
+
 ### Map format
 
 Map files follow the specification described below:
@@ -92,6 +96,7 @@ Map files follow the specification described below:
 - Character movements
 - Jumps (the longer you hold the jump button, the higher you jump)
 - Wall jumps
+- Sprint (hold `Shift`)
 - Quick restart (by pressing `R`)
 - Quick exit (by pressing `Esc`)
 - Pause (~~and pause buffer is a feature~~)
