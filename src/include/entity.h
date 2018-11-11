@@ -18,7 +18,8 @@ enum entity_type
 {
     PLAYER = 0,
     FOE_1  = 1,
-    FOE_2  = 2
+    FOE_2  = 2,
+    BLOODY_FOE_1 = 10
 };
 
 struct transform

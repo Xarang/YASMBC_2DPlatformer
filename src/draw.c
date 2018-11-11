@@ -3,7 +3,7 @@
 //should merge the two values below
 
 #define NB_TEXTURES 5
-#define NB_SPRITES 12
+#define NB_SPRITES 15
 
 
 enum texture_id
@@ -25,7 +25,7 @@ struct texture
 #define PLAYER_SPRITE_LEN 165
 
 #define BLOCK_SIZE_F 60
-#define FOES_SIZE_F 220 
+#define FOES_SIZE_F 220
 
 struct texture textures[NB_SPRITES] =
 {
@@ -35,34 +35,34 @@ struct texture textures[NB_SPRITES] =
                                               BLOCK_SIZE_F,
                                               BLOCK_SIZE_F
                                           }},
-    { .id = MAP, .name = "player",.rect = { 
+    { .id = MAP, .name = "player",.rect = {
                                               BLOCK_SIZE_F * 7,
                                               BLOCK_SIZE_F * 5,
                                               BLOCK_SIZE_F / 2,
-                                              BLOCK_SIZE_F / 2 
+                                              BLOCK_SIZE_F / 2
                                           }},
     { .id = MAP, .name = "finish", .rect = {
-                                               BLOCK_SIZE_F * 3, 
+                                               BLOCK_SIZE_F * 3,
                                                BLOCK_SIZE_F * 4,
                                                BLOCK_SIZE_F,
-                                               BLOCK_SIZE_F 
+                                               BLOCK_SIZE_F
                                            }},
-    { .id = MAP, .name = "ice", .rect = { 
-                                            BLOCK_SIZE_F * 5.2, 
+    { .id = MAP, .name = "ice", .rect = {
+                                            BLOCK_SIZE_F * 5.2,
                                             BLOCK_SIZE_F * 2.2,
-                                            BLOCK_SIZE_F * 0.7, 
-                                            BLOCK_SIZE_F * 0.7 
+                                            BLOCK_SIZE_F * 0.7,
+                                            BLOCK_SIZE_F * 0.7
                                         }},
     { .id = BACKGROUND, .name = "forestbg1", .rect = {
-                                                         0, 
-                                                         0, 
-                                                         640, 
-                                                         480 
+                                                         0,
+                                                         0,
+                                                         640,
+                                                         480
                                                      }},
 
     { .id = PLAYER_TXR, .name = "idle", .rect = {
-                                                    1, 
-                                                    1, 
+                                                    1,
+                                                    1,
                                                     PLAYER_SPRITE_LEN - 1,
                                                     PLAYER_SPRITE_LEN - 1
                                                 }},
@@ -73,29 +73,49 @@ struct texture textures[NB_SPRITES] =
                                                     PLAYER_SPRITE_LEN - 1
                                                 }},
     { .id  = PLAYER_TXR, .name = "full", .rect = {
-                                                     1, 
+                                                     1,
                                                      PLAYER_SPRITE_LEN * 2,
                                                      PLAYER_SPRITE_LEN - 1,
                                                      PLAYER_SPRITE_LEN - 1
                                                  }},
     { .id = FOES, .name = "buzzaxe01", .rect = {
-                                                 0, 
-                                                 0, 
-                                                 FOES_SIZE_F, 
+                                                 0,
+                                                 0,
+                                                 FOES_SIZE_F,
                                                  FOES_SIZE_F
                                              }},
 
     { .id = FOES, .name = "buzzaxe02", .rect = {
-                                                 FOES_SIZE_F, 
-                                                 0, 
-                                                 FOES_SIZE_F, 
+                                                 FOES_SIZE_F,
+                                                 0,
+                                                 FOES_SIZE_F,
                                                  FOES_SIZE_F
                                              }},
-    { .id = FOES, .name = "buzzaxe03", .rect = { 
-                                            FOES_SIZE_F * 2, 
-                                            0, 
-                                            FOES_SIZE_F, 
-                                            FOES_SIZE_F 
+    { .id = FOES, .name = "buzzaxe03", .rect = {
+                                            FOES_SIZE_F * 2,
+                                            0,
+                                            FOES_SIZE_F,
+                                            FOES_SIZE_F
+                                        }},
+
+    { .id = FOES, .name = "b_buzzaxe01", .rect = {
+                                                 0,
+                                                 0,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F
+                                             }},
+
+    { .id = FOES, .name = "b_buzzaxe02", .rect = {
+                                                 FOES_SIZE_F,
+                                                 0,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F
+                                             }},
+    { .id = FOES, .name = "b_buzzaxe03", .rect = {
+                                            FOES_SIZE_F * 2,
+                                            0,
+                                            FOES_SIZE_F,
+                                            FOES_SIZE_F
                                         }}
 };
 
@@ -112,7 +132,7 @@ struct SDL_Rect get_sprite(const char *name)
     return null;
 }
 
-const char* ressource_files[NB_TEXTURES] = 
+const char* ressource_files[NB_TEXTURES] =
 {
     "resources/sprites/forestbg.png",
     "resources/sprites/tiles.png",
@@ -133,7 +153,7 @@ void load_textures(struct gamestate *game)
         SDL_Surface *blocks = IMG_Load(ressource_files[i]);
         if (!blocks)
             printf("could not load texture\n");
-        SDL_Texture *blocks_texture=SDL_CreateTextureFromSurface(renderer,blocks); 
+        SDL_Texture *blocks_texture=SDL_CreateTextureFromSurface(renderer,blocks);
         if (!blocks_texture)
             printf("could not turn image into texture\n");
         if (i == 0)
@@ -141,7 +161,7 @@ void load_textures(struct gamestate *game)
         else
             list_add(textures, blocks_texture);
     }
-  
+
 
     SDL_Texture *veil_texture =SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGBA8888,
                                             SDL_TEXTUREACCESS_TARGET, 1, 1);
@@ -167,7 +187,7 @@ void init_window(struct gamestate *game)
     if (!window)
         return;
     printf("window created\n");
-    
+
     SDL_Renderer *renderer = SDL_CreateRenderer(window, 0, 0);
     game->window = window;
     game->renderer = renderer;
@@ -203,8 +223,8 @@ void render_map(struct gamestate *game)
     {
         for (size_t j = 0; j < map->height; j++)
         {
-            enum block_type current = map_get_type(map, i, j);   
-            struct SDL_Rect select = 
+            enum block_type current = map_get_type(map, i, j);
+            struct SDL_Rect select =
             {
                 BLOCK_SIZE * i,
                 BLOCK_SIZE * j,
@@ -238,8 +258,8 @@ void render_player(struct gamestate *game)
     SDL_Renderer *renderer = game->renderer;
     SDL_Texture *texture = list_get_n(game->textures, PLAYER_TXR);
     struct transform player_tf = game->player->transform;
-    
-    struct SDL_Rect player_position = 
+
+    struct SDL_Rect player_position =
     {
         BLOCK_SIZE * (player_tf.pos.x - player_tf.width / 2),
         BLOCK_SIZE * (player_tf.pos.y - player_tf.height),
@@ -250,13 +270,13 @@ void render_player(struct gamestate *game)
     warnx("on image : %d / %d / %d / %d\n", player_position.x, player_position.y,player_position.w,player_position.h);
 
     struct SDL_Rect sprite = get_sprite("full");
-    SDL_RenderCopy(renderer, texture, &sprite, &player_position); 
+    SDL_RenderCopy(renderer, texture, &sprite, &player_position);
 }
 
 void rendering_setup(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
-   
+
     SDL_SetRenderTarget(renderer, NULL);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
@@ -270,7 +290,7 @@ struct SDL_Rect get_entity_sprite(struct entity *entity)
     switch (type)
     {
         case PLAYER:
-            return get_sprite("player");     
+            return get_sprite("player");
         case FOE_1:
             if (state == 0)
                 return get_sprite("buzzaxe01");
@@ -278,6 +298,14 @@ struct SDL_Rect get_entity_sprite(struct entity *entity)
                 return get_sprite("buzzaxe02");
             else
                 return get_sprite("buzzaxe03");
+            break;
+        case BLOODY_FOE_1:
+            if (state == 0)
+                return get_sprite("b_buzzaxe01");
+            else if (state == 1)
+                return get_sprite("b_buzzaxe02");
+            else
+                return get_sprite("b_buzzaxe03");
             break;
         case FOE_2:
 
@@ -300,7 +328,7 @@ void render_entities(struct gamestate *game)
     warnx("loaded entities");
     if (!entities)
         warnx("entitites null");
-    
+
     for (size_t i = 0; i < map->nb_entities; i++)
     {
         struct entity *current = entities->data;
