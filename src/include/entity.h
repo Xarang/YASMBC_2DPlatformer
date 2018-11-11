@@ -49,7 +49,7 @@ void reset_entity(struct entity *entity);
 void destroy_entity(struct entity *entity);
 enum entity_status update_entity(struct entity *entity,
                                  struct gamestate *gamestate);
-int collides(struct transform tf1, struct transform tf2);
+int collides_foe_disk(struct entity *player, struct entity *foe);
 void print_entity(struct entity *entity);
 
 #endif /* ! ENTITY_H */
