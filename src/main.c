@@ -104,7 +104,6 @@ int main(void)
         if (game->inputs[EXIT])
             break;
         enum game_status status = update(game, inputs);
-
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
