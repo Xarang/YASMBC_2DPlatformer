@@ -3,7 +3,7 @@
 //should merge the two values below
 
 #define NB_TEXTURES 5
-#define NB_SPRITES 9
+#define NB_SPRITES 10
 
 
 enum texture_id
@@ -25,28 +25,71 @@ struct texture
 #define PLAYER_SPRITE_LEN 165
 
 #define BLOCK_SIZE_F 60
+#define FOES_SIZE_F 220 
 
 struct texture textures[NB_SPRITES] =
 {
-    { .id = MAP, .name = "grass", .rect = {0, 0, BLOCK_SIZE_F,BLOCK_SIZE_F } },
-    { .id = MAP, .name = "player",.rect = { BLOCK_SIZE_F * 7, BLOCK_SIZE_F * 5,
-                                            BLOCK_SIZE_F / 2, BLOCK_SIZE_F / 2 } },
-    { .id = MAP, .name = "finish", .rect = { BLOCK_SIZE_F * 3, BLOCK_SIZE_F * 4,
-                                             BLOCK_SIZE_F,     BLOCK_SIZE_F }},
-    { .id = MAP, .name = "ice", .rect = { BLOCK_SIZE_F * 5.2, BLOCK_SIZE_F * 2.2,
-                                            BLOCK_SIZE_F * 0.7, BLOCK_SIZE_F * 0.7 }},
-    { .id = BACKGROUND, .name = "forestbg1", .rect = {0, 0, 640, 480 }},
+    { .id = MAP, .name = "grass", .rect = {
+                                              0,
+                                              0,
+                                              BLOCK_SIZE_F,
+                                              BLOCK_SIZE_F
+                                          }},
+    { .id = MAP, .name = "player",.rect = { 
+                                              BLOCK_SIZE_F * 7,
+                                              BLOCK_SIZE_F * 5,
+                                              BLOCK_SIZE_F / 2,
+                                              BLOCK_SIZE_F / 2 
+                                          }},
+    { .id = MAP, .name = "finish", .rect = {
+                                               BLOCK_SIZE_F * 3, 
+                                               BLOCK_SIZE_F * 4,
+                                               BLOCK_SIZE_F,
+                                               BLOCK_SIZE_F 
+                                           }},
+    { .id = MAP, .name = "ice", .rect = { 
+                                            BLOCK_SIZE_F * 5.2, 
+                                            BLOCK_SIZE_F * 2.2,
+                                            BLOCK_SIZE_F * 0.7, 
+                                            BLOCK_SIZE_F * 0.7 
+                                        }},
+    { .id = BACKGROUND, .name = "forestbg1", .rect = {
+                                                         0, 
+                                                         0, 
+                                                         640, 
+                                                         480 
+                                                     }},
 
-    { .id = PLAYER_TXR, .name = "idle", .rect = {1, 1, PLAYER_SPRITE_LEN - 1,
-                                                       PLAYER_SPRITE_LEN - 1}},
-    { .id = PLAYER_TXR, .name = "jump", .rect = {PLAYER_SPRITE_LEN * 5 + 1,
-                                                 PLAYER_SPRITE_LEN * 1 + 1,
-                                                 PLAYER_SPRITE_LEN - 1,
-                                                 PLAYER_SPRITE_LEN - 1}},
-    { .id  = PLAYER_TXR, .name = "full", .rect = {1, PLAYER_SPRITE_LEN * 2,
+    { .id = PLAYER_TXR, .name = "idle", .rect = {
+                                                    1, 
+                                                    1, 
                                                     PLAYER_SPRITE_LEN - 1,
-                                                    PLAYER_SPRITE_LEN - 1}},
-    { .id = UI, .name = "veil", .rect = { 0, 0, 1, 1 }}
+                                                    PLAYER_SPRITE_LEN - 1
+                                                }},
+    { .id = PLAYER_TXR, .name = "jump", .rect = {
+                                                    PLAYER_SPRITE_LEN * 5 + 1,
+                                                    PLAYER_SPRITE_LEN * 1 + 1,
+                                                    PLAYER_SPRITE_LEN - 1,
+                                                    PLAYER_SPRITE_LEN - 1
+                                                }},
+    { .id  = PLAYER_TXR, .name = "full", .rect = {
+                                                     1, 
+                                                     PLAYER_SPRITE_LEN * 2,
+                                                     PLAYER_SPRITE_LEN - 1,
+                                                     PLAYER_SPRITE_LEN - 1
+                                                 }},
+    { .id = FOES, .name = "buzzaxe", .rect = {
+                                                 0, 
+                                                 0, 
+                                                 FOES_SIZE_F, 
+                                                 FOES_SIZE_F
+                                             }},
+    { .id = UI, .name = "veil", .rect = { 
+                                            0, 
+                                            0, 
+                                            1, 
+                                            1 
+                                        }}
 };
 
 struct SDL_Rect get_sprite(const char *name)
@@ -67,7 +110,7 @@ const char* ressource_files[NB_TEXTURES] =
     "resources/sprites/forestbg.png",
     "resources/sprites/tiles.png",
     "resources/sprites/cube.png",
-    "resources/sprites/tiles.png",
+    "resources/sprites/foes.png",
     "resources/sprites/tiles.png"
 };
 
@@ -230,17 +273,44 @@ void render_UI(struct gamestate *game)
   //  }
 }
 
-/*
 void render_entities(struct gamestate *game)
 {
-    struct entit
+    warnx("entered entities rendering");
+    SDL_Renderer *renderer = game->renderer;
+    SDL_Texture *texture = list_get_n(game->textures, FOES); 
+    struct map *map = game->map;
+    for (size_t i = 0; i < map->nb_entities; i++)
+    {
+        struct entity *current = map->entities + i;
+        char *name = "foe";
+        switch (current->type)
+        {
+            case PLAYER:
+                //?
+                break;
+            case FOE_1:
+                name = "buzzaxe";
+                break;
+            case FOE_2:
+                name = "gagaga";
+                break;
+        }
+        struct SDL_Rect sprite = get_sprite(name);
+        struct transform transform = current->transform;
+        struct SDL_Rect pos = { transform.pos.x, transform.pos.y,
+                                transform.width, transform.height };
+        SDL_RenderCopy(renderer, texture, &sprite, &pos);
+    }
+    warnx("exit render entities..");
 }
-*/
+
 void render_game(struct gamestate *game)
 {
     render_background(game);
     render_map(game);
     render_player(game);
+    warnx("will try to render entities..");
+    //render_entities(game);
     render_UI(game);
     SDL_RenderPresent(game->renderer);
 }

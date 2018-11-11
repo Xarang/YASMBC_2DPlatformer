@@ -16,6 +16,7 @@ struct gamestate *gamestate_init(void)
         { 0                , 0                 }
     };
     new->player = create_entity(PLAYER, player_pos);
+    warnx("player created");
     new->last_update_time = SDL_GetPerformanceCounter();
     new->is_paused = 0;
     init_window(new);
@@ -70,7 +71,6 @@ int main(void)
         SDL_RenderClear(game->renderer);
         render_game(game);
         SDL_Delay(16.66);
-        count--;
     }
     free_sfx(game->sfxs);
     Mix_FreeMusic(music);

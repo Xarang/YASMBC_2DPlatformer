@@ -8,9 +8,9 @@
 
 enum entity_type
 {
-    PLAYER,
-    FOE_1,
-    FOE_2
+    PLAYER = 0,
+    FOE_1  = 1,
+    FOE_2  = 2
 };
 
 struct transform
