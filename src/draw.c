@@ -6,7 +6,7 @@
 const char* ressource_files[NB_TEXTURES] =
 {
     "resources/sprites/forestbg.png",
-    "resources/sprites/forestbg.png",
+    "resources/sprites/forestbg2.png",
     "resources/sprites/tiles.png",
     "resources/sprites/cube.png",
     "resources/sprites/foes.png",
