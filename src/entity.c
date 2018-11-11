@@ -65,6 +65,7 @@ void reset_entity(struct entity *entity)
     entity->is_walled = 0;
 }
 
+#if 0
 static int is_in_hitbox(struct vector2 point, struct transform tf)
 {
     struct vector2 center = tf.pos;
@@ -75,6 +76,7 @@ static int is_in_hitbox(struct vector2 point, struct transform tf)
            center.y - semi_h <= point.y &&
            point.y <= center.y + semi_h;
 }
+
 
 int collides(struct transform tf1, struct transform tf2)
 {
@@ -110,3 +112,4 @@ int collides(struct transform tf1, struct transform tf2)
     }
     return 0;
 }
+#endif
