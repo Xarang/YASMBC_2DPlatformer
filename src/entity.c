@@ -49,22 +49,17 @@ void destroy_entity(struct entity *entity)
 
 enum entity_status update_entity(struct entity *entity, struct gamestate *gamestate)
 {
-    if (entity->type == PLAYER)
+    switch (entity->type)
     {
+    case PLAYER:
         return update_player(entity, gamestate);
-    }
-    else if (entity->type == FOE_1 || entity->type == BLOODY_FOE_1)
-    {
+    case FOE_1:
+    case BLOODY_FOE_1:
         return update_foe_1(entity, gamestate);
-    }
-    else if (entity->type == FOE_2)
-    {
-        return ENTITY_ERROR;
-    }
-    else
-    {
-        return ENTITY_ERROR;
-    }
+    case FOE_2:
+        return update_foe_2(entity, gamestate);
+    };
+    return ENTITY_ERROR;
 }
 
 void reset_entity(struct entity *entity)
@@ -74,51 +69,40 @@ void reset_entity(struct entity *entity)
     entity->is_walled = 0;
 }
 
-#if 0
-static int is_in_hitbox(struct vector2 point, struct transform tf)
+int collides_foe_disk(struct entity *player, struct entity *foe)
 {
-    struct vector2 center = tf.pos;
-    double semi_w = tf.width / 2.0;
-    double semi_h = tf.height / 2.0;
-    return center.x - semi_w <= point.x &&
-           point.x <= center.x + semi_w &&
-           center.y - semi_h <= point.y &&
-           point.y <= center.y + semi_h;
-}
-
-
-int collides(struct transform tf1, struct transform tf2)
-{
-    struct vector2 corner = tf1.pos;
-    corner.x -= tf1.width / 2.0;
-    corner.y -= tf1.height / 2.0;
+    struct transform p_tf = player->transform;
+    double radius = foe->transform.width / 2;
+    struct vector2 center = foe->transform.pos;
+    struct vector2 corner = p_tf.pos;
+    corner.x -= p_tf.width / 2.0;
+    corner.y -= p_tf.height / 2.0;
 
     //Top left corner
-    if (is_in_hitbox(corner, tf2))
+    if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
         return 1;
     }
 
-    corner.x += tf1.width;
+    corner.x += p_tf.width;
     //Top right corner
-    if (is_in_hitbox(corner, tf2))
+    if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
         return 1;
     }
 
-    corner.y += tf1.height;
+    corner.y += p_tf.height;
     //Bottom right corner
-    if (is_in_hitbox(corner, tf2))
+    if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
         return 1;
     }
 
-    corner.x -= tf1.width;
+    corner.x -= p_tf.width;
     //Bottom left corner
-    if (is_in_hitbox(corner, tf2))
+    if (vector2_norm(vector2_add(corner, center, -1)) <= radius)
     {
         return 1;
     }
     return 0;
 }
-#endif
