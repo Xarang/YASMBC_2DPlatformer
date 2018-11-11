@@ -30,6 +30,7 @@ Run `./main` to launch the game.
 - `LeftArrow`: Move left
 - `RightArrow`: Move right
 - `UpArrow` or `Space`: Jump
+- `Shift`: Sprint
 - `P`: Pause the game
 - `R`: Restart the current level
 - `Escape`: Quit the game
@@ -43,9 +44,11 @@ Run `./main` to launch the game.
 - Sound effects:
     - Jump sound from Sonic
     - Pause sound from Super Mario Bros.
+    - Win sound from Final Fantasy VII
+    - Death sound from Super Meat Boy
 
 - Sprites:
     - Blocks and background from Super Meat Boy
-    - Player sprite from Cookie Run 
+    - Player sprite from Cookie Run
 
 ## Features
