@@ -6,26 +6,12 @@
 #define NB_SPRITES 15
 
 
-enum texture_id
-{
-    BACKGROUND = 0,
-    MAP        = 1,
-    PLAYER_TXR = 2,
-    FOES       = 3,
-    UI         = 4
-};
-
-struct texture
-{
-    enum texture_id id;
-    char *name;
-    SDL_Rect rect;
-};
-
 #define PLAYER_SPRITE_LEN 165
 
 #define BLOCK_SIZE_F 60
 #define FOES_SIZE_F 220
+
+#if 0
 
 struct texture textures[NB_SPRITES] =
 {
@@ -131,6 +117,42 @@ struct SDL_Rect get_sprite(const char *name)
     SDL_Rect null = {0, 0, 0, 0};
     return null;
 }
+
+
+struct SDL_Rect get_entity_sprite(struct entity *entity)
+{
+    enum entity_type type = entity->type;
+    int state = entity->state;
+    switch (type)
+    {
+        case PLAYER:
+            return get_sprite("player");
+        case FOE_1:
+            if (state == 0)
+                return get_sprite("buzzaxe01");
+            else if (state == 1)
+                return get_sprite("buzzaxe02");
+            else
+                return get_sprite("buzzaxe03");
+            break;
+        case BLOODY_FOE_1:
+            if (state == 0)
+                return get_sprite("b_buzzaxe01");
+            else if (state == 1)
+                return get_sprite("b_buzzaxe02");
+            else
+                return get_sprite("b_buzzaxe03");
+            break;
+        case FOE_2:
+
+            break;
+    }
+    SDL_Rect null = { 0, 0, 0, 0 };
+    return null;
+}
+
+
+#endif
 
 const char* ressource_files[NB_TEXTURES] =
 {
@@ -281,38 +303,6 @@ void rendering_setup(struct gamestate *game)
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
 
-}
-
-struct SDL_Rect get_entity_sprite(struct entity *entity)
-{
-    enum entity_type type = entity->type;
-    int state = entity->state;
-    switch (type)
-    {
-        case PLAYER:
-            return get_sprite("player");
-        case FOE_1:
-            if (state == 0)
-                return get_sprite("buzzaxe01");
-            else if (state == 1)
-                return get_sprite("buzzaxe02");
-            else
-                return get_sprite("buzzaxe03");
-            break;
-        case BLOODY_FOE_1:
-            if (state == 0)
-                return get_sprite("b_buzzaxe01");
-            else if (state == 1)
-                return get_sprite("b_buzzaxe02");
-            else
-                return get_sprite("b_buzzaxe03");
-            break;
-        case FOE_2:
-
-            break;
-    }
-    SDL_Rect null = { 0, 0, 0, 0 };
-    return null;
 }
 
 void render_entities(struct gamestate *game)

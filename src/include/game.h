@@ -28,6 +28,6 @@
 #include "foe_2.h"
 #include "free.h"
 #include "list.h"
-
+#include "sprites.h"
 
 #endif /*GAME_H_*/
