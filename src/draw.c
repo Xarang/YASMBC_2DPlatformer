@@ -17,7 +17,6 @@ void load_textures(struct gamestate *game)
 {
     game->texture_count = 0;
     struct SDL_Renderer *renderer = game->renderer;
-    //struct SDL_Window *window = game->window;
     struct list *textures;
     for (size_t i = 0; i < NB_TEXTURES - 1; i++)
     {
@@ -56,7 +55,6 @@ void init_window(struct gamestate *game)
             width, height, 0);
     if (!window)
         return;
-    printf("window created\n");
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, 0, 0);
     game->window = window;
