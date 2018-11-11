@@ -28,7 +28,7 @@ struct gamestate *gamestate_init(void)
     return new;
 }
 
-static int switch_map(struct gamestate *game, int ind, Mix_Music *music)
+Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
 {
     static char *maps[NB_MAPS] =
     {
@@ -42,13 +42,13 @@ static int switch_map(struct gamestate *game, int ind, Mix_Music *music)
         "resources/audio/stage2.mp3",
         "resources/audio/stage2.mp3"
     };
-    if (ind + 1 >= NB_MAPS)
-        return -1;
-    ind++;
+    *ind += 1;
+    if (*ind >= NB_MAPS)
+        return music;
     Mix_FreeMusic(music);
     Mix_Music *fanfare = play_music("resources/audio/win.mp3", 1);
     //destroy_map(game->map);
-    game->map = load_map(maps[ind]);
+    game->map = load_map(maps[*ind]);
     game->player->init_transform.pos.x = game->map->start.x;
     game->player->init_transform.pos.y = game->map->start.y;
     reset_entity(game->player);
@@ -64,8 +64,8 @@ static int switch_map(struct gamestate *game, int ind, Mix_Music *music)
             game->map->height * BLOCK_SIZE);
 
     Mix_FreeMusic(fanfare);
-    music = play_music(musics[ind], -1);
-    return ind;
+    Mix_Music *tmp = play_music(musics[*ind], -1);
+    return tmp;
 }
 
 int main(void)
@@ -108,8 +108,8 @@ int main(void)
 
         if (win == WIN)
         {
-            map = switch_map(game, map, music);
-            if (map < 0)
+            music = switch_map(game, &map, music);
+            if (map >= NB_MAPS)
                 break;
         }
 
