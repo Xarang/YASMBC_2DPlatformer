@@ -7,10 +7,7 @@ double delta_time(uint64_t *last_update_time)
 
     uint64_t last = *last_update_time;
     uint64_t now = SDL_GetPerformanceCounter();
-
     *last_update_time = now;
-
     double delta = (now - last) * 1000 / frequency;
-    printf("Delta = %f\n", delta);
     return delta;
 }
