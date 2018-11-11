@@ -47,7 +47,9 @@ static void parse_entity(FILE *f, struct list **entities)
             double y = 0;
             double h = 0;
             double w = 0;
-            for (size_t i = 0; i < 6; i++)
+            double s_x = 0;
+            double s_y = 0;
+            for (size_t i = 0; i < 8; i++)
             {
                 if (ptr)
                 {
@@ -59,7 +61,7 @@ static void parse_entity(FILE *f, struct list **entities)
                 a = 0; 
                 getline(&ptr, &a, f); 
                 double val = 0;
-                if (i < 5)
+                if (i < 7)
                 {
                     val = atof(ptr);
                     printf("parsed val %f\n", val);
@@ -74,10 +76,14 @@ static void parse_entity(FILE *f, struct list **entities)
                     w = val;
                 else if (i == 4)
                     h = val;
+                else if (i == 5)
+                    s_x = val;
+                else if (i == 6)
+                    s_y = val;
                 else
                 {
                     struct vector2 pos = { x, y };
-                    struct vector2 spd = { FOE_1_X_VEL, FOE_1_Y_VEL };
+                    struct vector2 spd = { s_x, s_y };
                     struct transform transform = { h, w, pos, spd};
                     struct entity *entity = create_entity(type, transform);
                     if (!(*entities))
