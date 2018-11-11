@@ -1,6 +1,6 @@
 #include "game.h"
 
-enum block_type type_from_char(char c)
+static enum block_type type_from_char(char c)
 {
     switch (c)
     {
@@ -19,7 +19,7 @@ enum block_type type_from_char(char c)
     }
 }
 
-char char_from_type(enum block_type type)
+static char char_from_type(enum block_type type)
 {
     switch(type)
     {
@@ -38,7 +38,7 @@ char char_from_type(enum block_type type)
 }
 
 
-void parse_entity(FILE *f, struct list **entities)
+static void parse_entity(FILE *f, struct list **entities)
 {
         char *ptr = NULL;
         size_t a = 0;
@@ -98,9 +98,7 @@ void parse_entity(FILE *f, struct list **entities)
             }
 }
 
-
-
-void parse_entities(FILE *f, struct map *map, int n)
+static void parse_entities(FILE *f, struct map *map, int n)
 {
    // char **ptr = malloc(sizeof(char*));
    // if (!ptr)

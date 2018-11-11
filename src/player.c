@@ -1,12 +1,12 @@
 #include <math.h>
 #include "player.h"
 #include "time_utils.h"
-#include "map.h"
 #include "input.h"
 #include "gamestate.h"
 #include "audio.h"
 #include "list.h"
 #include "foe_1.h"
+#include "block.h"
 
 #define SIGN(X) (((X) > 0) - ((X) < 0))
 
@@ -84,14 +84,13 @@ static struct vector2 get_move_acc(int *inputs, struct gamestate *gamestate)
 
 static double get_frict_factor(enum block_type b_type)
 {
-    switch (b_type)
+    if (is_slippery(b_type))
     {
-    case BLOCK:
-        return PLAYER_LATERAL_GROUND_FRICT_FACTOR;
-    case ICE:
         return PLAYER_LATERAL_ICE_FRICT_FACTOR;
-    default:
-        return -1.0;
+    }
+    else
+    {
+        return PLAYER_LATERAL_GROUND_FRICT_FACTOR;
     }
 }
 
@@ -142,8 +141,10 @@ static int collides_foes(struct entity *player, struct gamestate *gamestate)
     for (size_t i = 0; i < nb_entities; i++)
     {
         foe = list_get_n(foes, i);
-        if (foe->type == FOE_1 && collides_foe_1(player, foe))
+        if ((foe->type == FOE_1 || foe->type == BLOODY_FOE_1) &&
+            collides_foe_1(player, foe))
         {
+            foe->type = BLOODY_FOE_1;
             return 1;
         }
     }
@@ -159,7 +160,7 @@ enum entity_status update_player(struct entity *player,
     //If the new vertical position is in a block
     enum block_type tile = map_get_type(gamestate->map, old_tf.pos.x,
                                         new_tf.pos.y);
-    if (tile == BLOCK || tile == ICE)
+    if (is_solid(tile))
     {
         //If the new vertical position is lower
         if (new_tf.pos.y >= old_tf.pos.y)
@@ -170,12 +171,12 @@ enum entity_status update_player(struct entity *player,
         new_tf.vel.y = 0.0;
         new_tf.pos.y = old_tf.pos.y;
     }
-    else if (tile == DEATH)
+    else if (is_deadly(tile))
     {
         kill_player(player, gamestate);
         return DIED;
     }
-    else if (tile == FINISH)
+    else if (is_finish(tile))
     {
         return PLAYER_FINISH;
     }
@@ -186,9 +187,9 @@ enum entity_status update_player(struct entity *player,
 
     //If the new horizontal position is in a block
     tile = map_get_type(gamestate->map, new_tf.pos.x, old_tf.pos.y);
-    if (tile == BLOCK || tile == ICE)
+    if (is_solid(tile))
     {
-        if (tile == BLOCK)
+        if (is_wall_jumpable(tile))
         {
             player->is_walled = 1;
             player->wall_dir = SIGN(new_tf.pos.x - old_tf.pos.x);
@@ -196,12 +197,12 @@ enum entity_status update_player(struct entity *player,
         new_tf.vel.x = 0.0;
         new_tf.pos.x = old_tf.pos.x;
     }
-    else if (tile == DEATH)
+    else if (is_deadly(tile))
     {
         kill_player(player, gamestate);
         return DIED;
     }
-    else if (tile == FINISH)
+    else if (is_finish(tile))
     {
         return PLAYER_FINISH;
     }
