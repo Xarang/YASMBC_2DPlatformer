@@ -3,7 +3,7 @@
 //should merge the two values below
 
 #define NB_TEXTURES 5
-#define NB_SPRITES 10
+#define NB_SPRITES 12
 
 
 enum texture_id
@@ -78,17 +78,24 @@ struct texture textures[NB_SPRITES] =
                                                      PLAYER_SPRITE_LEN - 1,
                                                      PLAYER_SPRITE_LEN - 1
                                                  }},
-    { .id = FOES, .name = "buzzaxe", .rect = {
+    { .id = FOES, .name = "buzzaxe01", .rect = {
                                                  0, 
                                                  0, 
                                                  FOES_SIZE_F, 
                                                  FOES_SIZE_F
                                              }},
-    { .id = UI, .name = "veil", .rect = { 
+
+    { .id = FOES, .name = "buzzaxe02", .rect = {
+                                                 FOES_SIZE_F, 
+                                                 0, 
+                                                 FOES_SIZE_F, 
+                                                 FOES_SIZE_F
+                                             }},
+    { .id = FOES, .name = "buzzaxe03", .rect = { 
+                                            FOES_SIZE_F * 2, 
                                             0, 
-                                            0, 
-                                            1, 
-                                            1 
+                                            FOES_SIZE_F, 
+                                            FOES_SIZE_F 
                                         }}
 };
 
@@ -246,31 +253,38 @@ void render_player(struct gamestate *game)
     SDL_RenderCopy(renderer, texture, &sprite, &player_position); 
 }
 
-
-void render_UI(struct gamestate *game)
+void rendering_setup(struct gamestate *game)
 {
     SDL_Renderer *renderer = game->renderer;
-    SDL_Texture *texture = list_get_n(game->textures, UI);
-    struct map *map = game->map;
    
     SDL_SetRenderTarget(renderer, NULL);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
 
-    struct SDL_Rect sprite = get_sprite("veil");
-    printf("veil rect : %d/%d/%d/%d\n", sprite.x, sprite.y, sprite.w, sprite.h);
-    struct SDL_Rect screen =
-    {
-        0,
-        0,
-        map->width,
-        map->height
-    };
+}
 
-   // if (game->is_paused)
-   // {
-        SDL_RenderCopy(renderer, texture, &sprite, &screen); 
-  //  }
+struct SDL_Rect get_entity_sprite(struct entity *entity)
+{
+    enum entity_type type = entity->type;
+    int state = entity->state;
+    switch (type)
+    {
+        case PLAYER:
+            return get_sprite("player");     
+        case FOE_1:
+            if (state == 0)
+                return get_sprite("buzzaxe01");
+            else if (state == 1)
+                return get_sprite("buzzaxe02");
+            else
+                return get_sprite("buzzaxe03");
+            break;
+        case FOE_2:
+
+            break;
+    }
+    SDL_Rect null = { 0, 0, 0, 0 };
+    return null;
 }
 
 void render_entities(struct gamestate *game)
@@ -281,7 +295,9 @@ void render_entities(struct gamestate *game)
     SDL_Texture *texture = list_get_n(game->textures, FOES);
     warnx("got texture");
     struct map *map = game->map;
+    warnx("loaded map");
     struct list *entities = map->entities;
+    warnx("loaded entities");
     if (!entities)
         warnx("entitites null");
     
@@ -291,25 +307,11 @@ void render_entities(struct gamestate *game)
         print_entity(current);
         if (!current)
             warnx("entity null");
-        char *name = "foe";
-        switch (current->type)
-        {
-            case PLAYER:
-                //?
-                break;
-            case FOE_1:
-                name = "buzzaxe";
-                break;
-            case FOE_2:
-                name = "gagaga";
-                break;
-        }
-        name = name;
-        struct SDL_Rect sprite = get_sprite(name);
+        struct SDL_Rect sprite = get_entity_sprite(current);
         struct transform transform = current->transform;
         printf("transform get\n");
-        struct SDL_Rect pos = { transform.pos.x * BLOCK_SIZE,
-                                transform.pos.y * BLOCK_SIZE,
+        struct SDL_Rect pos = { (transform.pos.x - transform.width / 2) * BLOCK_SIZE,
+                                (transform.pos.y - transform.width / 2)* BLOCK_SIZE,
                                 transform.width * BLOCK_SIZE, 
                                 transform.height* BLOCK_SIZE };
         printf("sdl rec created : pos: %d/%d scale : %d/%d\n",
@@ -322,12 +324,11 @@ void render_entities(struct gamestate *game)
 
 void render_game(struct gamestate *game)
 {
+    rendering_setup(game);
     render_background(game);
     render_map(game);
     render_player(game);
-    warnx("will try to render entities..");
     render_entities(game);
-    render_UI(game);
     SDL_RenderPresent(game->renderer);
 }
 

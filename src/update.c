@@ -3,6 +3,7 @@
 #include "audio.h"
 #include "player.h"
 #include "input.h"
+#include "list.h"
 
 static enum game_status get_game_status(enum entity_status player_status)
 {
@@ -17,6 +18,24 @@ static enum game_status get_game_status(enum entity_status player_status)
         return GAME_ERROR;
     }
     return GAME_ERROR;
+}
+
+void update_entity_states(struct map *map)
+{
+    struct list *entities = map->entities;
+    if (entities)
+    {
+        for (size_t i = 0; i < map->nb_entities; i++)
+        {
+            struct entity *current = entities->data;
+            if (current->type == FOE_1)
+            {
+                current->state++;
+                current->state %= 3;
+            }
+            entities = entities->next;
+        }
+    }
 }
 
 enum game_status update(struct gamestate *gamestate, int *inputs)
@@ -42,6 +61,8 @@ enum game_status update(struct gamestate *gamestate, int *inputs)
     {
         enum entity_status player_status = update_entity(gamestate->player,
                                                          gamestate);
+
+        update_entity_states(gamestate->map);
 #if 0
         size_t nb_entities = gamestate->nb_entities;
         struct entity *entities = gamestate->entities;

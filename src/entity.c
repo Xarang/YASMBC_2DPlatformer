@@ -21,6 +21,7 @@ struct entity *create_entity(enum entity_type type, struct transform transform)
     res->init_transform = transform;
     res->is_grounded = 0;
     res->is_walled = 0;
+    res->state = 0;
     return res;
 }
 
@@ -38,6 +39,7 @@ void print_entity(struct entity *entity)
     printf("entity of type %d\n", entity->type);
     printf("transform:\n");
     print_transform(entity->transform);
+    printf("state : %d\n", entity->state);
 }
 
 void destroy_entity(struct entity *entity)

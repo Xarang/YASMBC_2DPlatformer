@@ -38,7 +38,9 @@ struct entity
     char is_walled;
     char wall_dir;
     enum block_type ground_type;
+
     //SDL thingies
+    int state;
 };
 
 struct entity *create_entity(enum entity_type type, struct transform transform);
