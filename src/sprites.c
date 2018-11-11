@@ -57,6 +57,26 @@ struct sprite sprites[NB_SPRITES] =
                                                      PLAYER_SPRITE_LEN - 1,
                                                      PLAYER_SPRITE_LEN - 1
                                                  }},
+    { .id = FOES, .name = "b_buzzaxe01", .rect = {
+                                                 0,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F
+                                             }},
+
+    { .id = FOES, .name = "b_buzzaxe02", .rect = {
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F,
+                                                 FOES_SIZE_F
+                                             }},
+    { .id = FOES, .name = "b_buzzaxe03", .rect = {
+                                            FOES_SIZE_F * 2,
+                                            FOES_SIZE_F,
+                                            FOES_SIZE_F,
+                                            FOES_SIZE_F
+                                        }},
+
     { .id = FOES, .name = "buzzaxe01", .rect = {
                                                  0,
                                                  0,
@@ -71,26 +91,6 @@ struct sprite sprites[NB_SPRITES] =
                                                  FOES_SIZE_F
                                              }},
     { .id = FOES, .name = "buzzaxe03", .rect = {
-                                            FOES_SIZE_F * 2,
-                                            0,
-                                            FOES_SIZE_F,
-                                            FOES_SIZE_F
-                                        }},
-
-    { .id = FOES, .name = "b_buzzaxe01", .rect = {
-                                                 0,
-                                                 0,
-                                                 FOES_SIZE_F,
-                                                 FOES_SIZE_F
-                                             }},
-
-    { .id = FOES, .name = "b_buzzaxe02", .rect = {
-                                                 FOES_SIZE_F,
-                                                 0,
-                                                 FOES_SIZE_F,
-                                                 FOES_SIZE_F
-                                             }},
-    { .id = FOES, .name = "b_buzzaxe03", .rect = {
                                             FOES_SIZE_F * 2,
                                             0,
                                             FOES_SIZE_F,

@@ -28,7 +28,7 @@ void update_entity_states(struct map *map)
         for (size_t i = 0; i < map->nb_entities; i++)
         {
             struct entity *current = entities->data;
-            if (current->type == FOE_1)
+            if (current->type == FOE_1 || current->type == BLOODY_FOE_1)
             {
                 current->state++;
                 current->state %= 3;
