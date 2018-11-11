@@ -95,11 +95,9 @@ int main(void)
         {
             if (game->inputs[i])
                 printf("Button pressed: %ld, Value: %d\n", i, game->inputs[i]);
-            if (game->inputs[JUMP] == 1)
-                Mix_PlayChannel(1, game->sfxs[SFX_JUMP], 0);
         }
         int win = 0;
-        /*int win = update(game, inputs); */
+        /*int win = */update(game, inputs);
 
         SDL_RenderClear(game->renderer);
         render_game(game);
