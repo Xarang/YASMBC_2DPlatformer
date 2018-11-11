@@ -310,10 +310,13 @@ void render_entities(struct gamestate *game)
         struct SDL_Rect sprite = get_entity_sprite(current);
         struct transform transform = current->transform;
         printf("transform get\n");
-        struct SDL_Rect pos = { (transform.pos.x - transform.width / 2) * BLOCK_SIZE,
-                                (transform.pos.y - transform.width / 2)* BLOCK_SIZE,
-                                transform.width * BLOCK_SIZE, 
-                                transform.height* BLOCK_SIZE };
+        struct SDL_Rect pos =
+        {
+            (transform.pos.x - transform.width / 2) * BLOCK_SIZE,
+            (transform.pos.y - transform.height / 2) * BLOCK_SIZE,
+            transform.width * BLOCK_SIZE,
+            transform.height* BLOCK_SIZE
+        };
         printf("sdl rec created : pos: %d/%d scale : %d/%d\n",
                                 pos.x, pos.y, pos.w, pos.h);
         SDL_RenderCopy(renderer, texture, &sprite, &pos);
