@@ -3,17 +3,7 @@
 
 #include <stddef.h>
 #include "vector2.h"
-
-
-
-enum block_type
-{
-    VOID  = 0,
-    BLOCK = 1,
-    FINISH= 2,
-    DEATH = 3,
-    ICE   = 4
-};
+#include "block.h"
 
 struct map
 {

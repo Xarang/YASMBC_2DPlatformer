@@ -308,7 +308,7 @@ struct SDL_Rect get_entity_sprite(struct entity *entity)
                 return get_sprite("b_buzzaxe03");
             break;
         case FOE_2:
-
+        case BLOODY_FOE_1:
             break;
     }
     SDL_Rect null = { 0, 0, 0, 0 };
