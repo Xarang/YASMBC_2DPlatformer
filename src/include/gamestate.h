@@ -19,6 +19,7 @@ struct gamestate
     Mix_Chunk **sfxs;
     size_t texture_count;
     int is_paused;
+    Mix_Music *music;
 };
 
 struct gamestate *init(void);

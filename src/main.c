@@ -48,7 +48,7 @@ Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
         return music;
     Mix_FreeMusic(music);
     Mix_Music *fanfare = play_music("resources/audio/win.mp3", 1);
-    //destroy_map(game->map);
+    destroy_map(game->map);
     game->map = load_map(maps[*ind]);
     game->player->init_transform.pos.x = game->map->start.x;
     game->player->init_transform.pos.y = game->map->start.y;
@@ -69,6 +69,8 @@ Mix_Music *switch_map(struct gamestate *game, int *ind, Mix_Music *music)
     return tmp;
 }
 
+
+
 int main(void)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
@@ -77,7 +79,8 @@ int main(void)
     struct gamestate *game = gamestate_init();
 
     init_audio();
-    Mix_Music *music = play_music("resources/audio/stage1.mp3", -1);
+  //  Mix_Music *music = play_music("resources/audio/stage1.mp3", -1);
+    game->music = play_music("resources/audio/stage1.mp3", -1);
     render_game(game);
 
     int inputs[NB_ACTION] =
@@ -111,16 +114,13 @@ int main(void)
 
         if (win == WIN)
         {
-            music = switch_map(game, &map, music);
+            game->music = switch_map(game, &map, game->music);
             if (map >= NB_MAPS)
                 break;
         }
     //count--;
 //        SDL_Delay(16);
     }
-    free_sfx(game->sfxs);
-    Mix_FreeMusic(music);
-    close_audio();
-    SDL_Quit();
+    exit_game(game);
     return 0;
 }

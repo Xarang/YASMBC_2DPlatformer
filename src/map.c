@@ -118,6 +118,7 @@ void parse_entities(FILE *f, struct map *map, int n)
         *(ptr + try - 1) = '\0';
         if (*ptr == '{')
         {
+            free(ptr);
             parsing_entity = 1;
             ptr = NULL;
             a = 0;
@@ -205,6 +206,8 @@ struct map *load_map(const char *filename)
         {
             printf("detected entities : %d\n", atoi(*ptr));
             parse_entities(f, new, atoi(*ptr));
+            free(*ptr);
+            *ptr = NULL;
         }
         new->blocks = blocks; 
         if (ptr)
