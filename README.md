@@ -1,6 +1,6 @@
 # YASMBC
 
-authors : @vincent.te,  @jerome.tchan, @victor.coatalem
+authors : @francois.te,  @jerome.tchan, @victor.coatalem
 
 ## Introduction
 
